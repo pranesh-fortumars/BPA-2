@@ -1,5 +1,6 @@
 ---
 import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { IntegrationsHub } from '../../components/integrations/IntegrationsHub';
 import { 
   Network, 
   Link2, 
@@ -172,6 +173,15 @@ import {
                 </div>
             </div>
         </div>
+    </div>
+
+    {/* Custom 3rd-Party Integrations App Marketplace */}
+    <div class="pt-12 mt-12 border-t border-slate-200">
+        <div class="mb-8">
+            <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tighter">Third-Party Marketplace</h2>
+            <p class="text-slate-600 font-medium">Connect external tools like Slack, Jira, and GitHub seamlessly.</p>
+        </div>
+        <IntegrationsHub client:load />
     </div>
   </div>
 </DashboardLayout>
