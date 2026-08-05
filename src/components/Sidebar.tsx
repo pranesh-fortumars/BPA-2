@@ -23,7 +23,8 @@ import {
   UserCheck,
   Layers,
   Users2,
-  FolderKanban
+  FolderKanban,
+  GraduationCap
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -45,6 +46,10 @@ const menuItems = [
   { icon: CheckSquare, label: 'My Tasks', path: '/tasks', color: 'text-blue-500' },
 ];
 
+const hrItems = [
+  { icon: GraduationCap, label: 'HR & Talent', path: '/hr', color: 'text-emerald-500' },
+];
+
 const analyticItems = [
   { icon: BarChart3, label: 'Process Intelligence', path: '/analytics', color: 'text-violet-400' },
   { icon: Layers, label: 'Departmental', path: '/departments', color: 'text-slate-600' },
@@ -63,7 +68,7 @@ export const Sidebar = () => {
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
   
   const getActiveItem = () => {
-    const allItems = [...executiveItems, ...crmItems, ...menuItems, ...analyticItems, ...adminItems];
+    const allItems = [...executiveItems, ...crmItems, ...menuItems, ...hrItems, ...analyticItems, ...adminItems];
     // Robust path normalization for dynamic matching
     const normalizedPath = currentPath.replace(/\/$/, "");
     let match = allItems.find(item => {
@@ -158,6 +163,20 @@ export const Sidebar = () => {
           {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Workspace Hub</p>}
           <div className="space-y-1">
             {menuItems.map((item) => (
+              <SidebarItem 
+                key={item.label}
+                {...item}
+                isActive={activeItem === item.label}
+                isCollapsed={isCollapsed}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="pt-4 border-t border-slate-100 mt-4">
+          {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Operations Hub</p>}
+          <div className="space-y-1">
+            {hrItems.map((item) => (
               <SidebarItem 
                 key={item.label}
                 {...item}
