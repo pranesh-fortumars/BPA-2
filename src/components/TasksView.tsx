@@ -14,23 +14,39 @@ import {
   ShieldAlert,
   ArrowRight,
   Trash2,
-  CheckCircle
+  CheckCircle,
+  X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GlassCard } from './GlassCard';
+import { DataService } from '../lib/db';
 
 const initialTasks = [
-  { id: 1, title: 'Invoice Approval: HR Q1 Benefits', dept: 'HR', status: 'Pending', priority: 'High', delay: '2h overdue', assignee: 'Praneeth K.' },
-  { id: 2, title: 'Vendor Onboarding: TechStack Inc', dept: 'Ops', status: 'In Review', priority: 'Medium', delay: '4h remaining', assignee: 'Praneeth K.' },
-  { id: 3, title: 'Audit Log: Finance Review v2.1', dept: 'Finance', status: 'Blocked', priority: 'Critical', delay: 'AI Alert: Delay Expected', assignee: 'Praneeth K.' },
-  { id: 4, title: 'Onboarding: Sarah J. (Dev)', dept: 'HR', status: 'Pending', priority: 'Medium', delay: '1d remaining', assignee: 'Praneeth K.' },
-  { id: 5, title: 'Procurement: Laptops (Batch 4)', dept: 'Ops', status: 'Approved', priority: 'Low', delay: 'Completed', assignee: 'Praneeth K.' },
+  { id: '1', title: 'Invoice Approval: HR Q1 Benefits', dept: 'HR', status: 'Pending', priority: 'High', delay: '2h overdue', assignee: 'Praneeth K.' },
+  { id: '2', title: 'Vendor Onboarding: TechStack Inc', dept: 'Ops', status: 'In Review', priority: 'Medium', delay: '4h remaining', assignee: 'Praneeth K.' },
+  { id: '3', title: 'Audit Log: Finance Review v2.1', dept: 'Finance', status: 'Blocked', priority: 'Critical', delay: 'AI Alert: Delay Expected', assignee: 'Praneeth K.' },
+  { id: '4', title: 'Onboarding: Sarah J. (Dev)', dept: 'HR', status: 'Pending', priority: 'Medium', delay: '1d remaining', assignee: 'Praneeth K.' },
+  { id: '5', title: 'Procurement: Laptops (Batch 4)', dept: 'Ops', status: 'Approved', priority: 'Low', delay: 'Completed', assignee: 'Praneeth K.' },
 ];
 
 export const TasksView = () => {
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState('My Tasks');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [newTask, setNewTask] = useState({ title: '', dept: 'Ops', priority: 'Medium' });
+
+  React.useEffect(() => {
+    const loadTasks = async () => {
+      let stored = await DataService.getAll<any>('tasks');
+      if (stored.length === 0) {
+        for (const t of initialTasks) await DataService.save('tasks', t);
+        stored = initialTasks;
+      }
+      setTasks(stored);
+    };
+    loadTasks();
+  }, []);
 
   const filteredTasks = useMemo(() => {
      let result = tasks;
@@ -47,21 +63,26 @@ export const TasksView = () => {
      return result;
   }, [tasks, activeTab, searchQuery]);
 
-  const completeTask = (id: number) => {
+  const completeTask = async (id: string) => {
+     await DataService.delete('tasks', id);
      setTasks(prev => prev.filter(t => t.id !== id));
   };
 
-  const addTask = () => {
-     const newTask = {
-       id: Date.now(),
-       title: 'New Automation Request: ' + (Math.random() * 1000).toFixed(0),
-       dept: 'Ops',
+  const addTask = async (e: React.FormEvent) => {
+     e.preventDefault();
+     const task = {
+       id: Date.now().toString(),
+       title: newTask.title,
+       dept: newTask.dept,
        status: 'Pending',
-       priority: 'Medium',
+       priority: newTask.priority,
        delay: 'Just Arrival',
-       assignee: 'Praneeth K.'
+       assignee: 'Current User'
      };
-     setTasks(prev => [newTask, ...prev]);
+     await DataService.save('tasks', task);
+     setTasks(prev => [task, ...prev]);
+     setShowModal(false);
+     setNewTask({ title: '', dept: 'Ops', priority: 'Medium' });
   };
 
   return (
@@ -92,7 +113,7 @@ export const TasksView = () => {
               />
            </div>
            <button 
-             onClick={addTask}
+             onClick={() => setShowModal(true)}
              className="flex items-center gap-2 px-6 py-3 bg-violet-600 hover:bg-violet-500 rounded-xl text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-violet-600/20 transition-all active:scale-95"
            >
               <Plus size={16} /> New Process
@@ -233,6 +254,51 @@ export const TasksView = () => {
             Review Recommendations <ArrowRight size={18} />
          </button>
       </div>
+
+      {/* New Task Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-black uppercase tracking-tighter text-slate-900">Create Task</h3>
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-900 transition-colors"><X size={24}/></button>
+            </div>
+            
+            <form onSubmit={addTask} className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Task Title</label>
+                <input required value={newTask.title} onChange={e => setNewTask({...newTask, title: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors" placeholder="e.g. Approve Q4 Budget" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Department Queue</label>
+                <select value={newTask.dept} onChange={e => setNewTask({...newTask, dept: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors">
+                  <option value="Ops">Operations</option>
+                  <option value="HR">Human Resources</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Tech">Engineering</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Priority</label>
+                <select value={newTask.priority} onChange={e => setNewTask({...newTask, priority: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors">
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                  <option value="Critical">Critical</option>
+                </select>
+              </div>
+              
+              <button type="submit" className="w-full mt-6 py-4 bg-violet-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-violet-700 transition-colors shadow-xl shadow-violet-600/20 active:scale-95">
+                Add to Queue
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };

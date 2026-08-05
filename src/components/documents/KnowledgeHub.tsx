@@ -9,18 +9,59 @@ import {
   FileCode2, 
   MoreVertical,
   Clock,
-  ArrowRight
+  ArrowRight,
+  Plus,
+  X
 } from 'lucide-react';
+import { DataService } from '../../lib/db';
 
 export const KnowledgeHub = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [documents, setDocuments] = useState<any[]>([]);
+  const [newDoc, setNewDoc] = useState({ title: '', type: 'Wiki', emoji: '📄' });
+
+  React.useEffect(() => {
+    const loadDocs = async () => {
+      let stored = await DataService.getAll<any>('documents');
+      if (stored.length === 0) {
+        const initialDocs = [
+          { id: '1', title: 'Q4 Marketing Strategy', type: 'Wiki', date: '2 hours ago', emoji: '🚀' },
+          { id: '2', title: 'Frontend Architecture Guidelines', type: 'Tech', date: '1 day ago', emoji: '⚛️' },
+          { id: '3', title: 'Client Onboarding SOP', type: 'SOP', date: '3 days ago', emoji: '🤝' },
+          { id: '4', title: 'Design System Tokens v2', type: 'Tech', date: '1 week ago', emoji: '🎨' },
+          { id: '5', title: 'Expense Reimbursement Policy', type: 'SOP', date: '2 weeks ago', emoji: '💰' },
+          { id: '6', title: 'All-Hands Meeting Notes (Oct)', type: 'Wiki', date: '3 weeks ago', emoji: '🎙️' }
+        ];
+        for (const doc of initialDocs) await DataService.save('documents', doc);
+        stored = initialDocs;
+      }
+      setDocuments(stored.reverse());
+    };
+    loadDocs();
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       setIsSearching(true);
     }
+  };
+
+  const handleAddDoc = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const doc = {
+      id: Date.now().toString(),
+      title: newDoc.title,
+      type: newDoc.type,
+      date: 'Just now',
+      emoji: newDoc.emoji
+    };
+    await DataService.save('documents', doc);
+    setDocuments([doc, ...documents]);
+    setShowModal(false);
+    setNewDoc({ title: '', type: 'Wiki', emoji: '📄' });
   };
 
   return (
@@ -94,23 +135,65 @@ export const KnowledgeHub = () => {
             <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
               <div className="flex items-center justify-between mb-8">
                  <h3 className="text-lg font-black text-slate-900 tracking-tight">Recent Documents</h3>
-                 <button className="flex items-center gap-2 px-4 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-xl text-xs font-black uppercase tracking-widest transition-colors">
-                   View All <ArrowRight size={14} />
-                 </button>
+                 <div className="flex items-center gap-3">
+                   <button onClick={() => setShowModal(true)} className="flex items-center gap-2 px-4 py-2 bg-violet-600 hover:bg-violet-500 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-colors shadow-lg shadow-violet-600/20 active:scale-95">
+                     <Plus size={14} /> Upload
+                   </button>
+                   <button className="flex items-center gap-2 px-4 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 rounded-xl text-xs font-black uppercase tracking-widest transition-colors">
+                     View All <ArrowRight size={14} />
+                   </button>
+                 </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                 <DocCard title="Q4 Marketing Strategy" type="Wiki" date="2 hours ago" emoji="🚀" />
-                 <DocCard title="Frontend Architecture Guidelines" type="Tech" date="1 day ago" emoji="⚛️" />
-                 <DocCard title="Client Onboarding SOP" type="SOP" date="3 days ago" emoji="🤝" />
-                 <DocCard title="Design System Tokens v2" type="Tech" date="1 week ago" emoji="🎨" />
-                 <DocCard title="Expense Reimbursement Policy" type="SOP" date="2 weeks ago" emoji="💰" />
-                 <DocCard title="All-Hands Meeting Notes (Oct)" type="Wiki" date="3 weeks ago" emoji="🎙️" />
+                 {documents.map((doc: any) => (
+                    <DocCard key={doc.id} title={doc.title} type={doc.type} date={doc.date} emoji={doc.emoji} />
+                 ))}
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* New Document Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-black uppercase tracking-tighter text-slate-900">Upload Document</h3>
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-900 transition-colors"><X size={24}/></button>
+            </div>
+            
+            <form onSubmit={handleAddDoc} className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Document Title</label>
+                <input required value={newDoc.title} onChange={e => setNewDoc({...newDoc, title: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors" placeholder="e.g. Q1 Marketing Plan" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Document Type</label>
+                <select value={newDoc.type} onChange={e => setNewDoc({...newDoc, type: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors">
+                  <option value="Wiki">Wiki / Notes</option>
+                  <option value="SOP">Standard Operating Procedure</option>
+                  <option value="Tech">Technical Spec</option>
+                  <option value="Policy">Company Policy</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Icon Emoji</label>
+                <input required value={newDoc.emoji} onChange={e => setNewDoc({...newDoc, emoji: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors" placeholder="🚀" />
+              </div>
+              
+              <button type="submit" className="w-full mt-6 py-4 bg-violet-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-violet-700 transition-colors shadow-xl shadow-violet-600/20 active:scale-95">
+                Save Document
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };

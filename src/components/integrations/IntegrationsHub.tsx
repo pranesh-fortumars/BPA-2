@@ -1,7 +1,48 @@
-import React from 'react';
-import { Network, Activity, Search, Server, Shield, CheckCircle2, AlertTriangle, Settings } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Network, Activity, Search, Server, Shield, CheckCircle2, AlertTriangle, Settings, Plus, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { DataService } from '../../lib/db';
 
 export const IntegrationsHub = () => {
+  const [integrations, setIntegrations] = useState<any[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [newInt, setNewInt] = useState({ name: '', category: 'Communication', desc: '', iconText: 'A' });
+
+  useEffect(() => {
+    const loadInts = async () => {
+      let stored = await DataService.getAll<any>('integrations');
+      if (stored.length === 0) {
+        const initial = [
+           { id: '1', name: "Slack", category: "Communication", desc: "Send automated alerts, project updates, and approval workflows directly to Slack channels.", status: "connected", iconColor: "bg-rose-50 text-rose-600", iconText: "S" },
+           { id: '2', name: "GitHub", category: "DevOps", desc: "Sync repositories, track pull requests, and trigger CI/CD pipelines from the OS.", status: "connected", iconColor: "bg-slate-100 text-slate-800", iconText: "G" },
+           { id: '3', name: "Jira", category: "DevOps", desc: "Bi-directional sync of bugs, stories, and epics with your engineering workspaces.", status: "disconnected", iconColor: "bg-blue-50 text-blue-600", iconText: "J" },
+           { id: '4', name: "Razorpay", category: "Finance", desc: "Process payments, handle subscriptions, and automate invoicing reconciliation.", status: "error", iconColor: "bg-indigo-50 text-indigo-600", iconText: "R" }
+        ];
+        for (const i of initial) await DataService.save('integrations', i);
+        stored = initial;
+      }
+      setIntegrations(stored);
+    };
+    loadInts();
+  }, []);
+
+  const handleAddIntegration = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const item = {
+      id: Date.now().toString(),
+      name: newInt.name,
+      category: newInt.category,
+      desc: newInt.desc,
+      status: 'disconnected',
+      iconColor: 'bg-violet-50 text-violet-600',
+      iconText: newInt.iconText
+    };
+    await DataService.save('integrations', item);
+    setIntegrations([...integrations, item]);
+    setShowModal(false);
+    setNewInt({ name: '', category: 'Communication', desc: '', iconText: 'A' });
+  };
+
   return (
     <div className="space-y-8">
       {/* API Health Banner */}
@@ -57,57 +98,64 @@ export const IntegrationsHub = () => {
         </div>
 
         {/* Integration Grid */}
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-4">
-           <IntegrationCard 
-             name="Slack" 
-             category="Communication" 
-             desc="Send automated alerts, project updates, and approval workflows directly to Slack channels."
-             status="connected"
-             iconColor="bg-rose-50 text-rose-600"
-             iconText="S"
-           />
-           <IntegrationCard 
-             name="GitHub" 
-             category="DevOps" 
-             desc="Sync repositories, track pull requests, and trigger CI/CD pipelines from the OS."
-             status="connected"
-             iconColor="bg-slate-100 text-slate-800"
-             iconText="G"
-           />
-           <IntegrationCard 
-             name="Jira" 
-             category="DevOps" 
-             desc="Bi-directional sync of bugs, stories, and epics with your engineering workspaces."
-             status="disconnected"
-             iconColor="bg-blue-50 text-blue-600"
-             iconText="J"
-           />
-           <IntegrationCard 
-             name="Razorpay" 
-             category="Finance" 
-             desc="Process payments, handle subscriptions, and automate invoicing reconciliation."
-             status="error"
-             iconColor="bg-indigo-50 text-indigo-600"
-             iconText="R"
-           />
-           <IntegrationCard 
-             name="Salesforce" 
-             category="CRM" 
-             desc="Push qualified leads and synchronize client data to your Salesforce instance."
-             status="disconnected"
-             iconColor="bg-sky-50 text-sky-600"
-             iconText="SF"
-           />
-           <IntegrationCard 
-             name="Workday" 
-             category="HR" 
-             desc="Sync employee onboarding, payroll, and performance metrics securely."
-             status="connected"
-             iconColor="bg-amber-50 text-amber-600"
-             iconText="W"
-           />
+        <div className="flex-1 flex flex-col gap-4">
+           <div className="flex justify-end mb-2">
+             <button onClick={() => setShowModal(true)} className="flex items-center gap-2 px-6 py-3 bg-violet-600 hover:bg-violet-500 rounded-xl text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-violet-600/20 transition-all active:scale-95">
+                <Plus size={16} /> New Integration
+             </button>
+           </div>
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+             {integrations.map((item: any) => (
+                <IntegrationCard key={item.id} {...item} />
+             ))}
+           </div>
         </div>
       </div>
+
+      {/* New Integration Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-black uppercase tracking-tighter text-slate-900">Add Integration</h3>
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-900 transition-colors"><X size={24}/></button>
+            </div>
+            
+            <form onSubmit={handleAddIntegration} className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">App Name</label>
+                <input required value={newInt.name} onChange={e => setNewInt({...newInt, name: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors" placeholder="e.g. Asana" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Category</label>
+                <select value={newInt.category} onChange={e => setNewInt({...newInt, category: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors">
+                  <option value="Communication">Communication</option>
+                  <option value="DevOps">DevOps</option>
+                  <option value="Finance">Finance</option>
+                  <option value="CRM">CRM</option>
+                  <option value="HR">HR & Talent</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Icon Text (1-2 Chars)</label>
+                <input required maxLength={2} value={newInt.iconText} onChange={e => setNewInt({...newInt, iconText: e.target.value.toUpperCase()})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors" placeholder="AS" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Description</label>
+                <textarea required value={newInt.desc} onChange={e => setNewInt({...newInt, desc: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors min-h-[80px]" placeholder="Brief description of capabilities..." />
+              </div>
+              
+              <button type="submit" className="w-full mt-6 py-4 bg-violet-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-violet-700 transition-colors shadow-xl shadow-violet-600/20 active:scale-95">
+                Register Integration
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };

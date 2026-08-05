@@ -6,38 +6,35 @@
  */
 
 const DB_NAME = 'bpa_pro_db';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 // A simple promise-based IndexedDB wrapper
+export const initDB = (): Promise<IDBDatabase> => {
+  return new Promise((resolve, reject) => {
+    if (typeof window === 'undefined') {
+        return reject(new Error("IndexedDB is not available on the server"));
+    }
+
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+
+    request.onupgradeneeded = (e: IDBVersionChangeEvent) => {
+      const db = (e.target as IDBOpenDBRequest).result;
+      if (!db.objectStoreNames.contains('projects')) db.createObjectStore('projects', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('kpi_data')) db.createObjectStore('kpi_data', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('leads')) db.createObjectStore('leads', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('candidates')) db.createObjectStore('candidates', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('tasks')) db.createObjectStore('tasks', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('documents')) db.createObjectStore('documents', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('integrations')) db.createObjectStore('integrations', { keyPath: 'id' });
+    };
+  });
+};
+
 function getDB(): Promise<IDBDatabase> {
-    return new Promise((resolve, reject) => {
-        if (typeof window === 'undefined') {
-            // SSR safety
-            return reject(new Error("IndexedDB is not available on the server"));
-        }
-        
-        const request = window.indexedDB.open(DB_NAME, DB_VERSION);
-
-        request.onerror = () => reject(request.error);
-        request.onsuccess = () => resolve(request.result);
-
-        request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
-            const db = (event.target as IDBOpenDBRequest).result;
-            // Create object stores for different collections if they don't exist
-            if (!db.objectStoreNames.contains('kpi_data')) {
-                db.createObjectStore('kpi_data', { keyPath: 'id' });
-            }
-            if (!db.objectStoreNames.contains('projects')) {
-                db.createObjectStore('projects', { keyPath: 'id' });
-            }
-            if (!db.objectStoreNames.contains('leads')) {
-                db.createObjectStore('leads', { keyPath: 'id' });
-            }
-            if (!db.objectStoreNames.contains('candidates')) {
-                db.createObjectStore('candidates', { keyPath: 'id' });
-            }
-        };
-    });
+    return initDB();
 }
 
 export const DataService = {
