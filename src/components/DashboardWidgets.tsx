@@ -104,7 +104,7 @@ export const DashboardWidgets = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard title="Active Automations" value={liveStats.active} trend={12} icon={Zap} color="bg-violet-600" />
         <StatCard title="Total Completed" value={liveStats.completed.toLocaleString()} trend={8} icon={Activity} color="bg-emerald-600" />
-        <StatCard title="Operational Savings" value={`$${liveStats.savings}k`} trend={15} icon={TrendingUp} color="bg-amber-600" />
+        <StatCard title="Operational Savings" value={`₹${liveStats.savings}k`} trend={15} icon={TrendingUp} color="bg-amber-600" />
         <StatCard title="System Reliability" value={`${liveStats.uptime}%`} trend={0.02} icon={Clock} color="bg-violet-600" />
       </div>
 
