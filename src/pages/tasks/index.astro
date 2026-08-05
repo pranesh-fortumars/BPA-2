@@ -1,0 +1,12 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { TasksView } from '../../components/TasksView';
+---
+
+<DashboardLayout title="Operational Task Grid">
+  <!-- Dynamic Task View Island -->
+  <div class="relative min-h-screen">
+    <TasksView client:load />
+  </div>
+</DashboardLayout>
+

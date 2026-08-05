@@ -1,0 +1,48 @@
+---
+import '../styles/global.css';
+
+interface Props {
+	title?: string;
+  isLanding?: boolean;
+}
+
+const { title = "BPA Pro - Enterprise Automation", isLanding = false } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Enterprise-grade Business Process Automation platform for corporate efficiency." />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+	</head>
+	<body class="bg-white overflow-x-hidden antialiased selection:bg-violet-100 selection:text-violet-900">
+    <slot />
+	</body>
+</html>
+
+<style is:global>
+	:root {
+		--accent: 124, 58, 237;
+		--accent-light: 167, 139, 250;
+		--accent-dark: 109, 40, 217;
+		--accent-gradient: linear-gradient(
+			45deg,
+			rgb(var(--accent)),
+			rgb(var(--accent-light)) 30%,
+			white 60%
+		);
+	}
+	html {
+		background: #ffffff;
+      color: #0f172a;
+	}
+</style>
+
+
