@@ -6,7 +6,7 @@
  */
 
 const DB_NAME = 'bpa_pro_db';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 // A simple promise-based IndexedDB wrapper
 function getDB(): Promise<IDBDatabase> {
@@ -29,6 +29,12 @@ function getDB(): Promise<IDBDatabase> {
             }
             if (!db.objectStoreNames.contains('projects')) {
                 db.createObjectStore('projects', { keyPath: 'id' });
+            }
+            if (!db.objectStoreNames.contains('leads')) {
+                db.createObjectStore('leads', { keyPath: 'id' });
+            }
+            if (!db.objectStoreNames.contains('candidates')) {
+                db.createObjectStore('candidates', { keyPath: 'id' });
             }
         };
     });

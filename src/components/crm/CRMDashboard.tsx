@@ -11,7 +11,8 @@ import {
   Mail,
   Phone,
   Calendar,
-  CheckCircle2
+  CheckCircle2,
+  X
 } from 'lucide-react';
 import { DataService } from '../../lib/db';
 
@@ -23,18 +24,43 @@ const initialLeads = [
 ];
 
 export const CRMDashboard = () => {
-  const [leads, setLeads] = useState(initialLeads);
+  const [leads, setLeads] = useState<any[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [newLead, setNewLead] = useState({ name: '', contact: '', value: '', stage: 'lead' });
 
   useEffect(() => {
-    // In a real scenario, fetch from DataService here.
     const loadData = async () => {
-      // simulate DataService interaction
+      let storedLeads = await DataService.getAll<any>('leads');
+      if (storedLeads.length === 0) {
+        // Seed initial data
+        for (const lead of initialLeads) {
+          await DataService.save('leads', lead);
+        }
+        storedLeads = initialLeads;
+      }
+      setLeads(storedLeads);
     };
     loadData();
   }, []);
 
+  const handleAddLead = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const lead = {
+      id: Math.random().toString(36).substr(2, 9),
+      name: newLead.name,
+      contact: newLead.contact,
+      value: `₹${newLead.value}`,
+      stage: newLead.stage,
+      score: Math.floor(Math.random() * 40) + 50 // Random AI score between 50-90
+    };
+    await DataService.save('leads', lead);
+    setLeads([...leads, lead]);
+    setShowModal(false);
+    setNewLead({ name: '', contact: '', value: '', stage: 'lead' });
+  };
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 relative">
       {/* Top Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <MetricCard title="Total Active Leads" value="1,248" trend="+12%" icon={Users} color="text-blue-500" bg="bg-blue-50" />
@@ -48,7 +74,10 @@ export const CRMDashboard = () => {
         <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-100 shadow-sm p-6 overflow-x-auto custom-scrollbar">
           <div className="flex items-center justify-between mb-6 min-w-[700px]">
             <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Sales Pipeline</h3>
-            <button className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors">
+            <button 
+               onClick={() => setShowModal(true)}
+               className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 transition-colors"
+            >
               <Plus size={16} /> New Lead
             </button>
           </div>
@@ -108,6 +137,50 @@ export const CRMDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* New Lead Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-black uppercase tracking-tighter text-slate-900">Add New Lead</h3>
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-900 transition-colors"><X size={24}/></button>
+            </div>
+            
+            <form onSubmit={handleAddLead} className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Company Name</label>
+                <input required value={newLead.name} onChange={e => setNewLead({...newLead, name: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors" placeholder="e.g. Stark Industries" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Contact Person</label>
+                <input required value={newLead.contact} onChange={e => setNewLead({...newLead, contact: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors" placeholder="e.g. Tony Stark" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Pipeline Value (₹)</label>
+                <input required type="number" value={newLead.value} onChange={e => setNewLead({...newLead, value: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors" placeholder="e.g. 150000" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Initial Stage</label>
+                <select value={newLead.stage} onChange={e => setNewLead({...newLead, stage: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors">
+                  <option value="lead">Lead</option>
+                  <option value="opportunity">Opportunity</option>
+                  <option value="proposal">Proposal</option>
+                  <option value="negotiation">Negotiation</option>
+                </select>
+              </div>
+              
+              <button type="submit" className="w-full mt-6 py-4 bg-violet-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-violet-700 transition-colors shadow-xl shadow-violet-600/20 active:scale-95">
+                Save Lead to Database
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };

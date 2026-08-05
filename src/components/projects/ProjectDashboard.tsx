@@ -11,14 +11,56 @@ import {
   MessageSquare,
   Clock,
   MoreVertical,
-  Play
+  Play,
+  Plus,
+  X
 } from 'lucide-react';
+import { DataService } from '../../lib/db';
 
 export const ProjectDashboard = () => {
   const [activeTab, setActiveTab] = useState('board'); // board, engineering, ai
+  const [tasks, setTasks] = useState<any[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [newTask, setNewTask] = useState({ title: '', type: 'task', priority: 'medium', status: 'To Do' });
+
+  React.useEffect(() => {
+    const loadTasks = async () => {
+      let storedTasks = await DataService.getAll<any>('projects');
+      if (storedTasks.length === 0) {
+        const initial = [
+          { id: 'BPA-101', title: 'Setup Authentication Flow', type: 'task', priority: 'high', status: 'To Do' },
+          { id: 'BPA-104', title: 'Design System Migration', type: 'story', priority: 'medium', status: 'To Do' },
+          { id: 'BPA-102', title: 'Integrate Razorpay API', type: 'task', priority: 'critical', user: 'S', status: 'In Progress' },
+          { id: 'BPA-105', title: 'Data Abstraction Layer', type: 'story', priority: 'high', user: 'J', status: 'In Progress' },
+          { id: 'BPA-99', title: 'Fix Header Alignment', type: 'bug', priority: 'low', user: 'A', status: 'Code Review' },
+          { id: 'BPA-95', title: 'Initialize Repository', type: 'task', priority: 'medium', status: 'Done' }
+        ];
+        for (const t of initial) await DataService.save('projects', t);
+        storedTasks = initial;
+      }
+      setTasks(storedTasks);
+    };
+    loadTasks();
+  }, []);
+
+  const handleAddTask = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const task = {
+      id: `BPA-${Math.floor(Math.random() * 900) + 100}`,
+      title: newTask.title,
+      type: newTask.type,
+      priority: newTask.priority,
+      status: newTask.status,
+      user: 'P' // default user
+    };
+    await DataService.save('projects', task);
+    setTasks([...tasks, task]);
+    setShowModal(false);
+    setNewTask({ title: '', type: 'task', priority: 'medium', status: 'To Do' });
+  };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
       {/* Top Nav Tabs */}
       <div className="flex items-center gap-2 p-1.5 bg-slate-100 rounded-2xl w-fit">
         <TabButton active={activeTab === 'board'} onClick={() => setActiveTab('board')} icon={Kanban} label="Sprint Board" />
@@ -34,55 +76,108 @@ export const ProjectDashboard = () => {
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
         >
-          {activeTab === 'board' && <SprintBoard />}
+          {activeTab === 'board' && <SprintBoard tasks={tasks} onAdd={() => setShowModal(true)} />}
           {activeTab === 'engineering' && <EngineeringWorkspace />}
           {activeTab === 'ai' && <AIManager />}
         </motion.div>
       </AnimatePresence>
+
+      {/* New Task Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-black uppercase tracking-tighter text-slate-900">Add Sprint Task</h3>
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-900 transition-colors"><X size={24}/></button>
+            </div>
+            
+            <form onSubmit={handleAddTask} className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Task Title</label>
+                <input required value={newTask.title} onChange={e => setNewTask({...newTask, title: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors" placeholder="e.g. Implement Webhooks" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Task Type</label>
+                <select value={newTask.type} onChange={e => setNewTask({...newTask, type: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors">
+                  <option value="task">Task</option>
+                  <option value="story">Story</option>
+                  <option value="bug">Bug</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Priority</label>
+                <select value={newTask.priority} onChange={e => setNewTask({...newTask, priority: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors">
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                  <option value="critical">Critical</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Status</label>
+                <select value={newTask.status} onChange={e => setNewTask({...newTask, status: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors">
+                  <option value="To Do">To Do</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Code Review">Code Review</option>
+                  <option value="Done">Done</option>
+                </select>
+              </div>
+              
+              <button type="submit" className="w-full mt-6 py-4 bg-violet-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-violet-700 transition-colors shadow-xl shadow-violet-600/20 active:scale-95">
+                Save Task to Sprint
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };
 
 /* --- TAB COMPONENTS --- */
 
-const SprintBoard = () => (
-  <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm overflow-x-auto">
-    <div className="flex items-center justify-between mb-8 min-w-[800px]">
-      <div>
-        <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Sprint 42: Foundation</h3>
-        <p className="text-[10px] font-bold text-slate-500 mt-1">Oct 14 - Oct 28 • 14 days remaining</p>
-      </div>
-      <div className="flex items-center gap-4">
-        <div className="flex -space-x-2">
-           <img className="w-8 h-8 rounded-full border-2 border-white bg-slate-200" src="https://api.dicebear.com/7.x/avataaars/svg?seed=J" alt="Team" />
-           <img className="w-8 h-8 rounded-full border-2 border-white bg-slate-200" src="https://api.dicebear.com/7.x/avataaars/svg?seed=S" alt="Team" />
-           <img className="w-8 h-8 rounded-full border-2 border-white bg-slate-200" src="https://api.dicebear.com/7.x/avataaars/svg?seed=A" alt="Team" />
-           <div className="w-8 h-8 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-[9px] font-black">+4</div>
+const SprintBoard = ({ tasks, onAdd }: any) => {
+  const todo = tasks.filter((t: any) => t.status === 'To Do');
+  const inProgress = tasks.filter((t: any) => t.status === 'In Progress');
+  const review = tasks.filter((t: any) => t.status === 'Code Review');
+  const done = tasks.filter((t: any) => t.status === 'Done');
+
+  return (
+    <div className="bg-white rounded-3xl border border-slate-100 p-6 shadow-sm overflow-x-auto custom-scrollbar">
+      <div className="flex items-center justify-between mb-8 min-w-[800px]">
+        <div>
+          <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Sprint 42: Foundation</h3>
+          <p className="text-[10px] font-bold text-slate-500 mt-1">Oct 14 - Oct 28 • 14 days remaining</p>
         </div>
-        <button className="px-4 py-2 bg-violet-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-violet-500 transition-colors">
-          Complete Sprint
-        </button>
+        <div className="flex items-center gap-4">
+          <div className="flex -space-x-2">
+             <img className="w-8 h-8 rounded-full border-2 border-white bg-slate-200" src="https://api.dicebear.com/7.x/avataaars/svg?seed=J" alt="Team" />
+             <img className="w-8 h-8 rounded-full border-2 border-white bg-slate-200" src="https://api.dicebear.com/7.x/avataaars/svg?seed=S" alt="Team" />
+             <img className="w-8 h-8 rounded-full border-2 border-white bg-slate-200" src="https://api.dicebear.com/7.x/avataaars/svg?seed=A" alt="Team" />
+             <div className="w-8 h-8 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-[9px] font-black">+4</div>
+          </div>
+          <button onClick={onAdd} className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-colors">
+            <Plus size={14}/> Add Task
+          </button>
+          <button className="px-4 py-2 bg-violet-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-violet-500 transition-colors">
+            Complete Sprint
+          </button>
+        </div>
+      </div>
+      
+      <div className="flex gap-4 min-w-[800px]">
+        <KanbanColumn title="To Do" count={todo.length} items={todo} />
+        <KanbanColumn title="In Progress" count={inProgress.length} items={inProgress} />
+        <KanbanColumn title="Code Review" count={review.length} items={review} />
+        <KanbanColumn title="Done" count={done.length} items={done} />
       </div>
     </div>
-    
-    <div className="flex gap-4 min-w-[800px]">
-      <KanbanColumn title="To Do" count={12} items={[
-        { id: 'BPA-101', title: 'Setup Authentication Flow', type: 'task', priority: 'high' },
-        { id: 'BPA-104', title: 'Design System Migration', type: 'story', priority: 'medium' }
-      ]} />
-      <KanbanColumn title="In Progress" count={4} items={[
-        { id: 'BPA-102', title: 'Integrate Razorpay API', type: 'task', priority: 'critical', user: 'S' },
-        { id: 'BPA-105', title: 'Data Abstraction Layer', type: 'story', priority: 'high', user: 'J' }
-      ]} />
-      <KanbanColumn title="Code Review" count={2} items={[
-        { id: 'BPA-99', title: 'Fix Header Alignment', type: 'bug', priority: 'low', user: 'A' }
-      ]} />
-      <KanbanColumn title="Done" count={18} items={[
-        { id: 'BPA-95', title: 'Initialize Repository', type: 'task', priority: 'medium' }
-      ]} />
-    </div>
-  </div>
-);
+  );
+};
 
 const EngineeringWorkspace = () => (
   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

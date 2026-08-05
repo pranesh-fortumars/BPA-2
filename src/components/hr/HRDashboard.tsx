@@ -9,14 +9,53 @@ import {
   CheckCircle2,
   Calendar,
   Award,
-  Video
+  Video,
+  Plus,
+  X
 } from 'lucide-react';
+import { DataService } from '../../lib/db';
 
 export const HRDashboard = () => {
   const [activeTab, setActiveTab] = useState('recruitment'); // recruitment, onboarding, lms
+  const [candidates, setCandidates] = useState<any[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [newCandidate, setNewCandidate] = useState({ name: '', exp: '', match: 85, status: 'Screening' });
+
+  React.useEffect(() => {
+    const loadCandidates = async () => {
+      let storedCandidates = await DataService.getAll<any>('candidates');
+      if (storedCandidates.length === 0) {
+        const initial = [
+          { id: '1', name: 'Alex Johnson', exp: '6 Yrs', match: 94, status: 'Interview 2' },
+          { id: '2', name: 'Maria Garcia', exp: '8 Yrs', match: 88, status: 'Technical Test' },
+          { id: '3', name: 'David Chen', exp: '4 Yrs', match: 76, status: 'Screening' },
+          { id: '4', name: 'Sarah Miller', exp: '5 Yrs', match: 65, status: 'Rejected' }
+        ];
+        for (const c of initial) await DataService.save('candidates', c);
+        storedCandidates = initial;
+      }
+      setCandidates(storedCandidates);
+    };
+    loadCandidates();
+  }, []);
+
+  const handleAddCandidate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const candidate = {
+      id: Math.random().toString(36).substr(2, 9),
+      name: newCandidate.name,
+      exp: `${newCandidate.exp} Yrs`,
+      match: newCandidate.match,
+      status: newCandidate.status
+    };
+    await DataService.save('candidates', candidate);
+    setCandidates([...candidates, candidate]);
+    setShowModal(false);
+    setNewCandidate({ name: '', exp: '', match: 85, status: 'Screening' });
+  };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
       {/* Top Nav Tabs */}
       <div className="flex items-center gap-2 p-1.5 bg-slate-100 rounded-2xl w-fit">
         <TabButton active={activeTab === 'recruitment'} onClick={() => setActiveTab('recruitment')} icon={Users} label="Recruitment (ATS)" />
@@ -32,18 +71,62 @@ export const HRDashboard = () => {
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.2 }}
         >
-          {activeTab === 'recruitment' && <RecruitmentView />}
+          {activeTab === 'recruitment' && <RecruitmentView candidates={candidates} onAdd={() => setShowModal(true)} />}
           {activeTab === 'onboarding' && <OnboardingView />}
           {activeTab === 'lms' && <LMSView />}
         </motion.div>
       </AnimatePresence>
+
+      {/* New Candidate Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-[2rem] p-8 max-w-md w-full shadow-2xl"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-xl font-black uppercase tracking-tighter text-slate-900">Add Candidate</h3>
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-900 transition-colors"><X size={24}/></button>
+            </div>
+            
+            <form onSubmit={handleAddCandidate} className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Candidate Name</label>
+                <input required value={newCandidate.name} onChange={e => setNewCandidate({...newCandidate, name: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors" placeholder="e.g. John Doe" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Years of Experience</label>
+                <input required type="number" value={newCandidate.exp} onChange={e => setNewCandidate({...newCandidate, exp: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors" placeholder="e.g. 5" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">AI Match Score (%)</label>
+                <input required type="number" value={newCandidate.match} onChange={e => setNewCandidate({...newCandidate, match: Number(e.target.value)})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors" placeholder="e.g. 85" />
+              </div>
+              <div>
+                <label className="block text-[10px] font-black text-slate-600 uppercase tracking-widest mb-2">Initial Status</label>
+                <select value={newCandidate.status} onChange={e => setNewCandidate({...newCandidate, status: e.target.value})} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold focus:outline-none focus:border-violet-500 transition-colors">
+                  <option value="Screening">Screening</option>
+                  <option value="Technical Test">Technical Test</option>
+                  <option value="Interview 2">Interview 2</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
+              </div>
+              
+              <button type="submit" className="w-full mt-6 py-4 bg-violet-600 text-white rounded-xl text-xs font-black uppercase tracking-widest hover:bg-violet-700 transition-colors shadow-xl shadow-violet-600/20 active:scale-95">
+                Save Candidate to Database
+              </button>
+            </form>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };
 
 /* --- TAB COMPONENTS --- */
 
-const RecruitmentView = () => (
+const RecruitmentView = ({ candidates, onAdd }: any) => (
   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-100 p-6 shadow-sm">
       <div className="flex items-center justify-between mb-8">
@@ -51,16 +134,20 @@ const RecruitmentView = () => (
           <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Active Candidates</h3>
           <p className="text-[10px] font-bold text-slate-500 mt-1">Senior Frontend Engineer Role</p>
         </div>
-        <button className="px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-colors">
-          Parse New Resumes
-        </button>
+        <div className="flex gap-2">
+          <button onClick={onAdd} className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-colors">
+            <Plus size={14}/> Add Candidate
+          </button>
+          <button className="px-4 py-2 bg-white text-slate-900 border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-colors">
+            Parse Resumes
+          </button>
+        </div>
       </div>
       
       <div className="space-y-4">
-        <CandidateRow name="Alex Johnson" exp="6 Yrs" match={94} status="Interview 2" />
-        <CandidateRow name="Maria Garcia" exp="8 Yrs" match={88} status="Technical Test" />
-        <CandidateRow name="David Chen" exp="4 Yrs" match={76} status="Screening" />
-        <CandidateRow name="Sarah Miller" exp="5 Yrs" match={65} status="Rejected" />
+        {candidates.map((c: any) => (
+          <CandidateRow key={c.id} name={c.name} exp={c.exp} match={c.match} status={c.status} />
+        ))}
       </div>
     </div>
 
