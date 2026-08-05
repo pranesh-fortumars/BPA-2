@@ -16,10 +16,18 @@ import {
   Bot,
   FileText,
   Network,
-  Layers,
-  ClipboardList
+  ClipboardList,
+  Activity,
+  DollarSign,
+  PieChart,
+  UserCheck,
+  Layers
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+
+const executiveItems = [
+  { icon: Activity, label: 'Executive Center', path: '/executive', color: 'text-rose-500' },
+];
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard', color: 'text-violet-500' },
@@ -48,7 +56,7 @@ export const Sidebar = () => {
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
   
   const getActiveItem = () => {
-    const allItems = [...menuItems, ...analyticItems, ...adminItems];
+    const allItems = [...executiveItems, ...menuItems, ...analyticItems, ...adminItems];
     // Robust path normalization for dynamic matching
     const normalizedPath = currentPath.replace(/\/$/, "");
     let match = allItems.find(item => {
@@ -112,6 +120,20 @@ export const Sidebar = () => {
       {/* Main navigation */}
       <div className="flex-1 py-8 overflow-y-auto custom-scrollbar px-4 space-y-2">
         <div className="mb-4">
+          {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Executive</p>}
+          <div className="space-y-1">
+            {executiveItems.map((item) => (
+              <SidebarItem 
+                key={item.label}
+                {...item}
+                isActive={activeItem === item.label}
+                isCollapsed={isCollapsed}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="pt-4 border-t border-slate-100 mt-4">
           {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Workspace Hub</p>}
           <div className="space-y-1">
             {menuItems.map((item) => (

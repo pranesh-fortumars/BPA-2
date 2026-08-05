@@ -1,0 +1,27 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { ExecutiveOverview } from '../../components/executive/ExecutiveOverview';
+---
+
+<DashboardLayout title="Executive Command Center" activeDept="Global HQ">
+  <div class="space-y-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">Live Business Overview</h1>
+        <p class="text-[11px] font-black uppercase tracking-widest text-slate-500 mt-1">Real-time enterprise metrics & intelligence</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-black uppercase tracking-widest text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all shadow-sm active:scale-95">
+          Download PDF
+        </button>
+        <button class="px-5 py-2.5 bg-violet-600 rounded-xl text-xs font-black uppercase tracking-widest text-white hover:bg-violet-500 transition-all shadow-lg shadow-violet-600/30 active:scale-95">
+          Generate AI Report
+        </button>
+      </div>
+    </div>
+
+    <!-- React Island for the Dashboard widgets -->
+    <ExecutiveOverview client:load />
+    
+  </div>
+</DashboardLayout>
