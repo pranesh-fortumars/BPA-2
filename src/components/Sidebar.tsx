@@ -27,6 +27,8 @@ import {
   GraduationCap
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useStore } from '@nanostores/react';
+import { currentUser, logoutUser } from '../store/authStore';
 
 const executiveItems = [
   { icon: Activity, label: 'Executive Center', path: '/executive', color: 'text-rose-500' },
@@ -63,6 +65,7 @@ const adminItems = [
 
 export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const user = useStore(currentUser);
   
   // Dynamically determine active item from URL path
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
@@ -218,19 +221,22 @@ export const Sidebar = () => {
 
       {/* User profile & Footer */}
       <div className="p-4 border-t border-slate-100">
-        <div className={`flex items-center gap-3 p-2 rounded-xl transition-colors hover:bg-white cursor-pointer ${isCollapsed ? 'justify-center' : ''}`}>
-          <div className="w-10 h-10 rounded-full border-2 border-violet-500/10 overflow-hidden bg-white flex-shrink-0">
-             <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="User" />
+        <div className={`flex items-center gap-3 p-2 rounded-xl transition-colors hover:bg-slate-50 cursor-pointer ${isCollapsed ? 'justify-center' : ''}`}>
+          <div className={`w-10 h-10 rounded-[1rem] ${user?.avatarColor || 'bg-slate-200'} flex items-center justify-center text-white font-black overflow-hidden shadow-sm flex-shrink-0`}>
+             {user ? user.name.charAt(0) : <UserCheck size={18}/>}
           </div>
           {!isCollapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-slate-900 truncate">Praneeth Kumar</p>
-              <p className="text-[11px] text-slate-700 font-black uppercase tracking-widest truncate">System Architect</p>
+              <p className="text-sm font-bold text-slate-900 truncate">{user ? user.name : 'Unknown User'}</p>
+              <p className="text-[10px] text-violet-500 font-black uppercase tracking-widest truncate mt-0.5">{user ? user.role : 'Guest'}</p>
             </div>
           )}
         </div>
         {!isCollapsed && (
-          <button className="w-full mt-4 flex items-center justify-center gap-2 p-3 rounded-xl text-slate-600 hover:text-rose-600 hover:bg-rose-50 border border-transparent transition-all">
+          <button 
+            onClick={() => logoutUser()}
+            className="w-full mt-4 flex items-center justify-center gap-2 p-3 rounded-xl text-slate-600 hover:text-rose-600 hover:bg-rose-50 border border-transparent transition-all"
+          >
             <LogOut size={18} />
             <span className="text-sm font-bold">Log out</span>
           </button>

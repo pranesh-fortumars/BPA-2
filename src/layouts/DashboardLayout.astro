@@ -1,7 +1,9 @@
 ---
 import MainLayout from './MainLayout.astro';
 import { Sidebar } from '../components/Sidebar';
-import { Search, Bell, User, MessageSquare } from 'lucide-react';
+import { Search, Bell, MessageSquare } from 'lucide-react';
+import { MockLoginOverlay } from '../components/auth/MockLoginOverlay';
+import { TopbarUser } from '../components/auth/TopbarUser';
 
 interface Props {
   title?: string;
@@ -13,6 +15,7 @@ const { title, activeDept } = Astro.props;
 
 <MainLayout title={title}>
   <div class="flex min-h-screen bg-white">
+    <MockLoginOverlay client:only="react" />
     <Sidebar client:load />
     
     <div class="flex-1 transition-all duration-300 ml-[280px] bg-white min-h-screen">
@@ -48,15 +51,7 @@ const { title, activeDept } = Astro.props;
              </button>
           </div>
           
-          <div class="flex items-center gap-4 pl-8 border-l border-slate-100 ml-4 group cursor-pointer">
-             <div class="text-right hidden xl:block">
-                <p class="text-[12px] font-black text-slate-900 uppercase tracking-tighter leading-none mb-1.5 group-hover:text-violet-600 transition-colors">Praneeth Kumar</p>
-                <p class="text-[10px] text-violet-500 font-black uppercase tracking-widest leading-none opacity-80">Principal Architect • Hub Admin</p>
-             </div>
-             <div class="w-11 h-11 rounded-2xl bg-violet-600 flex items-center justify-center text-white shadow-xl shadow-violet-600/30 ring-2 ring-white hover:scale-105 transition-all">
-                <User size={22} />
-             </div>
-          </div>
+          <TopbarUser client:load />
         </div>
       </header>
 
