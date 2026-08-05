@@ -97,6 +97,59 @@ export const Sidebar = () => {
     collapsed: { width: '88px' }
   };
 
+  const hasAccess = (section: string) => {
+    if (!user) return false;
+    const role = user.role;
+    if (role === 'CEO') return true; // CEO sees all
+
+    switch (section) {
+      case 'Executive':
+        return ['Finance Manager'].includes(role);
+      case 'CRM':
+        return ['Sales Director'].includes(role);
+      case 'Workspace':
+        return ['Sales Director', 'HR Admin', 'Lead Engineer', 'Developer', 'Project Manager', 'Client', 'Designer', 'Finance Manager'].includes(role);
+      case 'HR':
+        return ['HR Admin', 'Project Manager'].includes(role);
+      case 'Analytics':
+        return ['Sales Director', 'Finance Manager'].includes(role);
+      case 'Admin':
+        return false;
+      default:
+        return false;
+    }
+  };
+
+  const filteredMenuItems = menuItems.filter(item => {
+    if (!user) return false;
+    const role = user.role;
+    if (role === 'CEO') return true;
+    if (['Lead Engineer', 'Developer'].includes(role)) {
+      return ['Project Delivery', 'Orchestration Studio', 'AI Agent Fleets', 'Integration Hub', 'My Tasks'].includes(item.label);
+    }
+    if (['HR Admin', 'Sales Director'].includes(role)) {
+      return ['Dashboard', 'My Tasks'].includes(item.label);
+    }
+    if (['Project Manager'].includes(role)) {
+      return ['Dashboard', 'Project Delivery', 'My Tasks'].includes(item.label);
+    }
+    if (['Finance Manager'].includes(role)) {
+      return ['My Tasks'].includes(item.label);
+    }
+    if (['Client', 'Designer'].includes(role)) {
+      return ['Neural Documents', 'My Tasks'].includes(item.label);
+    }
+    return false;
+  });
+
+  const filteredAnalyticItems = analyticItems.filter(item => {
+    if (!user) return false;
+    if (user.role === 'CEO') return true;
+    if (user.role === 'Sales Director') return item.label === 'Process Intelligence';
+    if (user.role === 'Finance Manager') return true;
+    return false;
+  });
+
   return (
     <motion.div 
       initial="expanded"
@@ -134,89 +187,101 @@ export const Sidebar = () => {
 
       {/* Main navigation */}
       <div className="flex-1 py-8 overflow-y-auto custom-scrollbar px-4 space-y-2">
-        <div className="mb-4">
-          {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Executive</p>}
-          <div className="space-y-1">
-            {executiveItems.map((item) => (
-              <SidebarItem 
-                key={item.label}
-                {...item}
-                isActive={activeItem === item.label}
-                isCollapsed={isCollapsed}
-              />
-            ))}
+        {hasAccess('Executive') && (
+          <div className="mb-4">
+            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Executive</p>}
+            <div className="space-y-1">
+              {executiveItems.map((item) => (
+                <SidebarItem 
+                  key={item.label}
+                  {...item}
+                  isActive={activeItem === item.label}
+                  isCollapsed={isCollapsed}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="pt-4 border-t border-slate-100 mt-4">
-          {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Client Ecosystem</p>}
-          <div className="space-y-1">
-            {crmItems.map((item) => (
-              <SidebarItem 
-                key={item.label}
-                {...item}
-                isActive={activeItem === item.label}
-                isCollapsed={isCollapsed}
-              />
-            ))}
+        {hasAccess('CRM') && (
+          <div className="pt-4 border-t border-slate-100 mt-4">
+            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Client Ecosystem</p>}
+            <div className="space-y-1">
+              {crmItems.map((item) => (
+                <SidebarItem 
+                  key={item.label}
+                  {...item}
+                  isActive={activeItem === item.label}
+                  isCollapsed={isCollapsed}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="pt-4 border-t border-slate-100 mt-4">
-          {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Workspace Hub</p>}
-          <div className="space-y-1">
-            {menuItems.map((item) => (
-              <SidebarItem 
-                key={item.label}
-                {...item}
-                isActive={activeItem === item.label}
-                isCollapsed={isCollapsed}
-              />
-            ))}
+        {hasAccess('Workspace') && filteredMenuItems.length > 0 && (
+          <div className="pt-4 border-t border-slate-100 mt-4">
+            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Workspace Hub</p>}
+            <div className="space-y-1">
+              {filteredMenuItems.map((item) => (
+                <SidebarItem 
+                  key={item.label}
+                  {...item}
+                  isActive={activeItem === item.label}
+                  isCollapsed={isCollapsed}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="pt-4 border-t border-slate-100 mt-4">
-          {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Operations Hub</p>}
-          <div className="space-y-1">
-            {hrItems.map((item) => (
-              <SidebarItem 
-                key={item.label}
-                {...item}
-                isActive={activeItem === item.label}
-                isCollapsed={isCollapsed}
-              />
-            ))}
+        {hasAccess('HR') && (
+          <div className="pt-4 border-t border-slate-100 mt-4">
+            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Operations Hub</p>}
+            <div className="space-y-1">
+              {hrItems.map((item) => (
+                <SidebarItem 
+                  key={item.label}
+                  {...item}
+                  isActive={activeItem === item.label}
+                  isCollapsed={isCollapsed}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="pt-4 border-t border-slate-100 mt-4">
-          {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Neural Assets</p>}
-          <div className="space-y-1">
-            {analyticItems.map((item) => (
-              <SidebarItem 
-                key={item.label}
-                {...item}
-                isActive={activeItem === item.label}
-                isCollapsed={isCollapsed}
-              />
-            ))}
+        {hasAccess('Analytics') && filteredAnalyticItems.length > 0 && (
+          <div className="pt-4 border-t border-slate-100 mt-4">
+            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Neural Assets</p>}
+            <div className="space-y-1">
+              {filteredAnalyticItems.map((item) => (
+                <SidebarItem 
+                  key={item.label}
+                  {...item}
+                  isActive={activeItem === item.label}
+                  isCollapsed={isCollapsed}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
-        <div className="pt-4 border-t border-slate-100 mt-4">
-          {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Sovereign Control</p>}
-          <div className="space-y-1">
-            {adminItems.map((item) => (
-              <SidebarItem 
-                key={item.label}
-                {...item}
-                isActive={activeItem === item.label}
-                isCollapsed={isCollapsed}
-              />
-            ))}
+        {hasAccess('Admin') && (
+          <div className="pt-4 border-t border-slate-100 mt-4">
+            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Sovereign Control</p>}
+            <div className="space-y-1">
+              {adminItems.map((item) => (
+                <SidebarItem 
+                  key={item.label}
+                  {...item}
+                  isActive={activeItem === item.label}
+                  isCollapsed={isCollapsed}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* User profile & Footer */}
