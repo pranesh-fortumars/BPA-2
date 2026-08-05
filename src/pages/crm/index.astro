@@ -1,0 +1,27 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { CRMDashboard } from '../../components/crm/CRMDashboard';
+---
+
+<DashboardLayout title="Client Lifecycle Management" activeDept="Sales & CRM">
+  <div class="space-y-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">CRM & Lead Pipeline</h1>
+        <p class="text-[11px] font-black uppercase tracking-widest text-slate-500 mt-1">AI-Powered Lead Scoring & Sales Automation</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-black uppercase tracking-widest text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-all shadow-sm active:scale-95">
+          Import Leads
+        </button>
+        <button class="px-5 py-2.5 bg-violet-600 rounded-xl text-xs font-black uppercase tracking-widest text-white hover:bg-violet-500 transition-all shadow-lg shadow-violet-600/30 active:scale-95">
+          Quotation Builder
+        </button>
+      </div>
+    </div>
+
+    <!-- React Island for the CRM components -->
+    <CRMDashboard client:load />
+    
+  </div>
+</DashboardLayout>

@@ -21,12 +21,17 @@ import {
   DollarSign,
   PieChart,
   UserCheck,
-  Layers
+  Layers,
+  Users2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const executiveItems = [
   { icon: Activity, label: 'Executive Center', path: '/executive', color: 'text-rose-500' },
+];
+
+const crmItems = [
+  { icon: Users2, label: 'CRM & Sales', path: '/crm', color: 'text-blue-500' },
 ];
 
 const menuItems = [
@@ -56,7 +61,7 @@ export const Sidebar = () => {
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
   
   const getActiveItem = () => {
-    const allItems = [...executiveItems, ...menuItems, ...analyticItems, ...adminItems];
+    const allItems = [...executiveItems, ...crmItems, ...menuItems, ...analyticItems, ...adminItems];
     // Robust path normalization for dynamic matching
     const normalizedPath = currentPath.replace(/\/$/, "");
     let match = allItems.find(item => {
@@ -123,6 +128,20 @@ export const Sidebar = () => {
           {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Executive</p>}
           <div className="space-y-1">
             {executiveItems.map((item) => (
+              <SidebarItem 
+                key={item.label}
+                {...item}
+                isActive={activeItem === item.label}
+                isCollapsed={isCollapsed}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="pt-4 border-t border-slate-100 mt-4">
+          {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Client Ecosystem</p>}
+          <div className="space-y-1">
+            {crmItems.map((item) => (
               <SidebarItem 
                 key={item.label}
                 {...item}
