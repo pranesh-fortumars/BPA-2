@@ -1,5 +1,6 @@
 ---
 import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { KnowledgeHub } from '../../components/documents/KnowledgeHub';
 import { 
   FileText, 
   Search, 
@@ -184,6 +185,15 @@ import {
                 </div>
             </div>
         </div>
+    </div>
+
+    {/* Knowledge Hub Integration */}
+    <div class="pt-12 mt-12 border-t border-slate-200">
+        <div class="mb-8">
+            <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tighter">Enterprise Knowledge Base</h2>
+            <p class="text-slate-600 font-medium">Semantic Search, Wikis, and Standard Operating Procedures</p>
+        </div>
+        <KnowledgeHub client:load />
     </div>
   </div>
 </DashboardLayout>
