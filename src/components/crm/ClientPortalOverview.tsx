@@ -56,8 +56,8 @@ export const ClientPortalOverview = () => {
              <FileText size={18} className="text-slate-400"/> Recent Invoices
           </h3>
           <div className="space-y-3">
-             <InvoiceRow id="INV-2026-001" amount="$12,500" status="Paid" date="Oct 15, 2026" />
-             <InvoiceRow id="INV-2026-042" amount="$8,200" status="Pending" date="Nov 10, 2026" highlight />
+             <InvoiceRow id="INV-2026-001" amount="₹12,500" status="Paid" date="Oct 15, 2026" />
+             <InvoiceRow id="INV-2026-042" amount="₹8,200" status="Pending" date="Nov 10, 2026" highlight />
           </div>
         </div>
 

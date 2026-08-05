@@ -58,7 +58,7 @@ export const ExecutiveOverview = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <KPICard 
           title="Revenue (Week)" 
-          value="$240.5K" 
+          value="₹240.5K" 
           trend="+14.2%" 
           trendUp={true} 
           icon={DollarSign} 

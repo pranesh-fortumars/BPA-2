@@ -16,10 +16,10 @@ import {
 import { DataService } from '../../lib/db';
 
 const initialLeads = [
-  { id: '1', name: 'Acme Corp', contact: 'John Doe', stage: 'lead', score: 92, value: '$12,000' },
-  { id: '2', name: 'Global Tech', contact: 'Sarah Smith', stage: 'opportunity', score: 78, value: '$45,000' },
-  { id: '3', name: 'Stark Industries', contact: 'Tony Stark', stage: 'proposal', score: 95, value: '$150,000' },
-  { id: '4', name: 'Wayne Ent', contact: 'Bruce Wayne', stage: 'negotiation', score: 88, value: '$80,000' },
+  { id: '1', name: 'Acme Corp', contact: 'John Doe', stage: 'lead', score: 92, value: '₹12,000' },
+  { id: '2', name: 'Global Tech', contact: 'Sarah Smith', stage: 'opportunity', score: 78, value: '₹45,000' },
+  { id: '3', name: 'Stark Industries', contact: 'Tony Stark', stage: 'proposal', score: 95, value: '₹150,000' },
+  { id: '4', name: 'Wayne Ent', contact: 'Bruce Wayne', stage: 'negotiation', score: 88, value: '₹80,000' },
 ];
 
 export const CRMDashboard = () => {
@@ -38,7 +38,7 @@ export const CRMDashboard = () => {
       {/* Top Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <MetricCard title="Total Active Leads" value="1,248" trend="+12%" icon={Users} color="text-blue-500" bg="bg-blue-50" />
-        <MetricCard title="Pipeline Value" value="$2.4M" trend="+5.4%" icon={TrendingUp} color="text-emerald-500" bg="bg-emerald-50" />
+        <MetricCard title="Pipeline Value" value="₹2.4M" trend="+5.4%" icon={TrendingUp} color="text-emerald-500" bg="bg-emerald-50" />
         <MetricCard title="Proposals Sent" value="84" trend="-2%" icon={FileText} color="text-amber-500" bg="bg-amber-50" />
         <MetricCard title="Win Rate" value="68%" trend="+4%" icon={CheckCircle2} color="text-violet-500" bg="bg-violet-50" />
       </div>
