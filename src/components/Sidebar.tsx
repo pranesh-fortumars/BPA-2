@@ -22,7 +22,8 @@ import {
   PieChart,
   UserCheck,
   Layers,
-  Users2
+  Users2,
+  FolderKanban
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -36,6 +37,7 @@ const crmItems = [
 
 const menuItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard', color: 'text-violet-500' },
+  { icon: FolderKanban, label: 'Project Delivery', path: '/projects', color: 'text-blue-600' },
   { icon: Workflow, label: 'Orchestration Studio', path: '/builder', color: 'text-purple-500' },
   { icon: Bot, label: 'AI Agent Fleets', path: '/agents', color: 'text-emerald-500' },
   { icon: FileText, label: 'Neural Documents', path: '/documents', color: 'text-amber-500' },

@@ -1,0 +1,24 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { ProjectDashboard } from '../../components/projects/ProjectDashboard';
+---
+
+<DashboardLayout title="Project Delivery Hub" activeDept="Engineering & Product">
+  <div class="space-y-8">
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-black text-slate-900 tracking-tighter uppercase">Delivery Operations</h1>
+        <p class="text-[11px] font-black uppercase tracking-widest text-slate-500 mt-1">Sprint Tracking, Code Review, and AI Risk Management</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="px-5 py-2.5 bg-violet-600 rounded-xl text-xs font-black uppercase tracking-widest text-white hover:bg-violet-500 transition-all shadow-lg shadow-violet-600/30 active:scale-95">
+          New Project
+        </button>
+      </div>
+    </div>
+
+    <!-- React Island for the Project Dashboard -->
+    <ProjectDashboard client:load />
+    
+  </div>
+</DashboardLayout>
