@@ -28,31 +28,26 @@ graph TD
     classDef secondary fill:#f8fafc,stroke:#e2e8f0,stroke-width:2px,color:#0f172a;
     classDef database fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff,font-weight:bold;
 
-    subgraph Core System [Astro + React Islands]
+    subgraph CoreSystem [Astro + React Islands]
         Auth[Security: Auth Store & RBAC]:::primary
         UI[Interactive UI Components]:::secondary
         Store[State Management: Nano Stores]:::secondary
     end
 
-    subgraph Enterprise Modules [Application Hubs]
-        Executive[Executive Center]:::secondary
-        CRM[CRM & Sales Pipeline]:::secondary
-        Projects[Project Delivery]:::secondary
-        HR[HR & Talent ATS]:::secondary
-        Docs[Neural Documents]:::secondary
-        Integrations[Integration Hub]:::secondary
+    subgraph AppHubs [Application Hubs]
+        Hubs[CRM, HR, Projects, Docs, Integrations]:::secondary
     end
 
-    subgraph Persistence Layer [Offline-First Sync]
+    subgraph PersistenceLayer [Offline-First Sync]
         DataService[Data Abstraction Service]:::primary
         IndexedDB[(Browser IndexedDB v3)]:::database
     end
 
     %% Data Flow
     Auth --> |Enforces Roles| UI
-    UI --> |Renders| Enterprise Modules
-    Enterprise Modules <--> |Subscribes / Updates| Store
-    Enterprise Modules --> |CRUD Operations| DataService
+    UI --> |Renders| Hubs
+    Hubs <--> |Subscribes / Updates| Store
+    Hubs --> |CRUD Operations| DataService
     DataService <--> |Persists Data| IndexedDB
 ```
 
