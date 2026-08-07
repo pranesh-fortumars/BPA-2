@@ -1,13 +1,93 @@
-# Kitchen Sink: Microfrontends with Astro
+# BPA PRO: Enterprise Operating System 🚀
 
-```sh
-npm create astro@latest -- --template framework-multiple
+BPA PRO is a next-generation, highly-performant, Offline-First Enterprise Operating System built using the **Astro.js Islands Architecture**. It serves as a unified workspace connecting CRM, Project Management, Human Resources, Document Management, and API Integrations seamlessly in one location.
+
+## ✨ Key Features
+- **Offline-First Synchronization:** Powered by a customized IndexedDB `DataService`, all modules (Tasks, Documents, CRM Leads, Candidates, Integrations) instantly save and persist data directly inside the browser—no backend required.
+- **Role-Based Access Control (RBAC):** Dynamic sidebar navigation strictly enforces security policies. An HR Admin only sees the Operations Hub, while the CEO receives full visibility across the platform.
+- **Islands Architecture:** Utilizes Astro.js to render zero-JavaScript static HTML by default, selectively hydrating interactive React components only when necessary.
+- **Glassmorphic UI/UX:** Stunning, modern interface built with Tailwind CSS and Framer Motion, delivering micro-animations, dynamic shadowing, and localized currency (₹).
+
+## 🛠 Tech Stack
+- **Framework:** Astro.js
+- **UI Components:** React
+- **Styling:** Tailwind CSS
+- **Animations:** Framer Motion
+- **State Management:** Nano Stores
+- **Database / Persistence:** IndexedDB
+- **Icons:** Lucide React
+
+## 🏗 System Architecture & Working
+
+The platform relies on a decentralized, frontend-first architecture. User interactions update the Nano Store for immediate UI repaints, while the `DataService` simultaneously commits the payloads to the local IndexedDB.
+
+```mermaid
+graph TD
+    %% Styling
+    classDef primary fill:#7c3aed,stroke:#5b21b6,stroke-width:2px,color:#fff,font-weight:bold;
+    classDef secondary fill:#f8fafc,stroke:#e2e8f0,stroke-width:2px,color:#0f172a;
+    classDef database fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff,font-weight:bold;
+
+    subgraph Core System [Astro + React Islands]
+        Auth[Security: Auth Store & RBAC]:::primary
+        UI[Interactive UI Components]:::secondary
+        Store[State Management: Nano Stores]:::secondary
+    end
+
+    subgraph Enterprise Modules [Application Hubs]
+        Executive[Executive Center]:::secondary
+        CRM[CRM & Sales Pipeline]:::secondary
+        Projects[Project Delivery]:::secondary
+        HR[HR & Talent ATS]:::secondary
+        Docs[Neural Documents]:::secondary
+        Integrations[Integration Hub]:::secondary
+    end
+
+    subgraph Persistence Layer [Offline-First Sync]
+        DataService[Data Abstraction Service]:::primary
+        IndexedDB[(Browser IndexedDB v3)]:::database
+    end
+
+    %% Data Flow
+    Auth --> |Enforces Roles| UI
+    UI --> |Renders| Enterprise Modules
+    Enterprise Modules <--> |Subscribes / Updates| Store
+    Enterprise Modules --> |CRUD Operations| DataService
+    DataService <--> |Persists Data| IndexedDB
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/framework-multiple)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/framework-multiple)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/framework-multiple/devcontainer.json)
+## 🚀 Getting Started
 
-This example showcases Astro's built-in support for multiple frameworks ([React](https://react.dev), [Preact](https://preactjs.com), [Svelte](https://svelte.dev), and [Vue (`v3.x`)](https://v3.vuejs.org/)).
+### Prerequisites
+- Node.js >= 20.0.0
 
-No configuration is needed to enable these frameworks—just start writing components in `src/components`.
+### Installation
+1. Clone the repository.
+2. Install the dependencies:
+   ```bash
+   npm install
+   ```
+
+### Development
+Run the local development server:
+```bash
+npm run dev
+```
+Navigate to `http://localhost:4321` to view the application.
+
+### Building for Production
+To build the static application:
+```bash
+npm run build
+```
+Preview the production build locally:
+```bash
+npm run preview
+```
+
+## 🔐 Authentication & Roles
+On load, the application provides an **Identity Selection** screen. You can log in as different mock users to test the RBAC capabilities:
+- **Harish (CEO):** Full Access
+- **Sathya (HR Admin):** Operations Hub, Tasks
+- **Praneeth (Lead Engineer):** Workspace, Integrations
+- **Priya (Sales Director):** CRM, Analytics
