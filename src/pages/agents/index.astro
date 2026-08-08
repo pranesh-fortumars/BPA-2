@@ -1,71 +1,13 @@
 ---
 import DashboardLayout from '../../layouts/DashboardLayout.astro';
-import { AgenticBPM } from '../../components/AgenticBPM';
-import { Bot, Cpu, Zap, Sparkles, ShieldCheck } from 'lucide-react';
+import { AgentFleetManager } from '../../components/intelligence/AgentFleetManager';
 ---
 
-<DashboardLayout title="Autonomous Agents & Executors">
-  <div class="space-y-12 pb-32">
-    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10">
-        <div>
-            <h1 class="text-6xl font-black text-slate-900 uppercase tracking-tighter flex items-center gap-6">
-                <Bot className="text-violet-600 w-16 h-16" />
-                Agentic BPM Center
-            </h1>
-            <p class="text-slate-700 text-xl font-medium mt-2 max-w-2xl">Neural-native autonomous executors for high-complexity enterprise workflows and predictive process orchestration.</p>
-        </div>
-        <div class="flex gap-4">
-            <div class="px-6 py-3 bg-violet-50 border border-violet-100 rounded-2xl flex items-center gap-3 text-violet-600">
-                <div class="w-2 h-2 rounded-full bg-violet-500 animate-pulse shadow-[0_0_8px_#6366f1]"></div>
-                <span class="text-[10px] font-black uppercase tracking-widest leading-none">Core v4 Online</span>
-            </div>
-            <button class="px-8 py-3 bg-white text-slate-900 font-black rounded-2xl hover:bg-white transition-all uppercase tracking-widest text-xs shadow-2xl flex items-center gap-2">
-                <Sparkles size={18} /> Deploy New Agent
-            </button>
-        </div>
-    </div>
-
-    <section class="mt-12 bg-white border border-slate-200 p-12 rounded-[4rem] relative overflow-hidden shadow-sm">
-        <div class="absolute top-0 right-0 w-96 h-96 bg-violet-50 rounded-full blur-[120px] -mr-48 -mt-48"></div>
-        <div class="absolute bottom-0 left-0 w-96 h-96 bg-violet-50 rounded-full blur-[120px] -ml-48 -mb-48 opacity-40"></div>
-        
-        <div class="relative z-10 space-y-12">
-            <div class="flex items-center gap-4 mb-4">
-               <div class="w-1.5 h-10 bg-violet-600 rounded-full shadow-lg shadow-violet-600/20"></div>
-               <h2 class="text-3xl font-black text-slate-900 uppercase tracking-tighter">Active Autonomous Fleets</h2>
-            </div>
-            <AgenticBPM client:load />
-        </div>
-    </section>
-
-    {/* Section: Agentic Insights Banner */}
-    <section class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 pb-24">
-        <div class="bg-violet-50/50 border border-violet-100 p-10 rounded-[3rem] space-y-6">
-            <h3 class="text-xl font-black text-slate-900 uppercase tracking-tighter flex items-center gap-3">
-               <Zap className="text-amber-500" />
-               Agent Impact Diagnostic
-            </h3>
-            <p class="text-slate-600 text-sm font-medium leading-relaxed">Since deploying <span className="text-violet-600 font-black">Neural-Agent Core v4</span>, average process cycle time has decreased by <span className="text-emerald-500 font-black text-lg">28.4%</span> across all high-touch operational sectors.</p>
-            <div class="h-3 w-full bg-violet-100/50 rounded-full overflow-hidden">
-               <div class="h-full w-[82%] bg-violet-600 shadow-[0_0_15px_rgba(79,70,229,0.3)]"></div>
-            </div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-slate-600">82% Efficiency Improvement across 42 active fleets.</p>
-        </div>
-
-        <div class="bg-white border border-slate-200 p-10 rounded-[3rem] space-y-6 shadow-sm">
-            <h3 class="text-xl font-black text-slate-900 uppercase tracking-tighter flex items-center gap-3">
-               <ShieldCheck className="text-emerald-500" />
-               Compliance Sovereignty
-            </h3>
-            <p class="text-slate-600 text-sm font-medium leading-relaxed">All agentic decisions are logged on a private, immutable ledger with full traceability mapping to ISO 27001 auditing standards.</p>
-            <button class="text-violet-600 font-black text-xs uppercase tracking-widest hover:text-violet-800 transition-colors border-b-2 border-violet-100 hover:border-violet-600 pb-1">Review Decision Ledger</button>
-        </div>
-    </section>
+<DashboardLayout title="AI Agent Fleets | BPA PRO">
+  <div class="mb-8">
+    <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-2">AI Agent <span class="text-emerald-500">Fleets</span></h1>
+    <p class="text-slate-500 font-medium">Orchestrate and monitor autonomous background intelligence workers.</p>
   </div>
+  
+  <AgentFleetManager client:load />
 </DashboardLayout>
-
-
-
-
-
-
