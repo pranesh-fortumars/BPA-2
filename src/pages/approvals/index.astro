@@ -1,0 +1,13 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { ApprovalInbox } from '../../components/operations/ApprovalInbox';
+---
+
+<DashboardLayout title="Approval Inbox | BPA PRO">
+  <div class="mb-8">
+    <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-2">Decision <span class="text-rose-500">Center</span></h1>
+    <p class="text-slate-500 font-medium">Review, delegate, and approve critical operations requests.</p>
+  </div>
+  
+  <ApprovalInbox client:load />
+</DashboardLayout>

@@ -1,0 +1,13 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { ResourcePlanner } from '../../components/operations/ResourcePlanner';
+---
+
+<DashboardLayout title="Resource Planner | BPA PRO">
+  <div class="mb-8">
+    <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-2">Capacity <span class="text-amber-500">Overview</span></h1>
+    <p class="text-slate-500 font-medium">Manage team utilization and sync with external calendars.</p>
+  </div>
+  
+  <ResourcePlanner client:load />
+</DashboardLayout>

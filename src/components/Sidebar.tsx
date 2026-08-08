@@ -24,7 +24,9 @@ import {
   Layers,
   Users2,
   FolderKanban,
-  GraduationCap
+  GraduationCap,
+  Calendar,
+  Inbox
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@nanostores/react';
@@ -50,6 +52,8 @@ const menuItems = [
 
 const hrItems = [
   { icon: GraduationCap, label: 'HR & Talent', path: '/hr', color: 'text-emerald-500' },
+  { icon: Calendar, label: 'Resource Planner', path: '/planner', color: 'text-amber-500' },
+  { icon: Inbox, label: 'Approval Inbox', path: '/approvals', color: 'text-rose-500' },
 ];
 
 const analyticItems = [

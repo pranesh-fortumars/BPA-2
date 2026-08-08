@@ -13,12 +13,14 @@ import {
   MoreVertical,
   Play,
   Plus,
-  X
+  X,
+  Flag,
+  ArrowRight
 } from 'lucide-react';
 import { DataService } from '../../lib/db';
 
 export const ProjectDashboard = () => {
-  const [activeTab, setActiveTab] = useState('board'); // board, engineering, ai
+  const [activeTab, setActiveTab] = useState('board'); // board, milestones, engineering, ai
   const [tasks, setTasks] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [newTask, setNewTask] = useState({ title: '', type: 'task', priority: 'medium', status: 'To Do' });
@@ -64,6 +66,7 @@ export const ProjectDashboard = () => {
       {/* Top Nav Tabs */}
       <div className="flex items-center gap-2 p-1.5 bg-slate-100 rounded-2xl w-fit">
         <TabButton active={activeTab === 'board'} onClick={() => setActiveTab('board')} icon={Kanban} label="Sprint Board" />
+        <TabButton active={activeTab === 'milestones'} onClick={() => setActiveTab('milestones')} icon={Flag} label="Milestones" />
         <TabButton active={activeTab === 'engineering'} onClick={() => setActiveTab('engineering')} icon={Terminal} label="Engineering" />
         <TabButton active={activeTab === 'ai'} onClick={() => setActiveTab('ai')} icon={BrainCircuit} label="AI Manager" />
       </div>
@@ -77,6 +80,7 @@ export const ProjectDashboard = () => {
           transition={{ duration: 0.2 }}
         >
           {activeTab === 'board' && <SprintBoard tasks={tasks} onAdd={() => setShowModal(true)} />}
+          {activeTab === 'milestones' && <MilestoneTracker />}
           {activeTab === 'engineering' && <EngineeringWorkspace />}
           {activeTab === 'ai' && <AIManager />}
         </motion.div>
@@ -174,6 +178,64 @@ const SprintBoard = ({ tasks, onAdd }: any) => {
         <KanbanColumn title="In Progress" count={inProgress.length} items={inProgress} />
         <KanbanColumn title="Code Review" count={review.length} items={review} />
         <KanbanColumn title="Done" count={done.length} items={done} />
+      </div>
+    </div>
+  );
+};
+
+const MilestoneTracker = () => {
+  const milestones = [
+    { id: 'M1', title: 'Foundation Architecture', status: 'Completed', progress: 100, date: 'Oct 1' },
+    { id: 'M2', title: 'Core Workflows API', status: 'In Progress', progress: 65, date: 'Oct 15' },
+    { id: 'M3', title: 'Client Portal MVP', status: 'Blocked', progress: 20, date: 'Oct 30' },
+    { id: 'M4', title: 'Beta Launch', status: 'Not Started', progress: 0, date: 'Nov 15' },
+  ];
+
+  return (
+    <div className="bg-white rounded-3xl border border-slate-100 p-8 shadow-sm">
+      <div className="flex items-center justify-between mb-8">
+        <h3 className="text-sm font-black uppercase tracking-widest text-slate-900">Project Milestones & Dependencies</h3>
+        <button className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 transition-colors">
+          <Plus size={14}/> Add Milestone
+        </button>
+      </div>
+
+      <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-violet-500 before:via-slate-200 before:to-slate-100">
+        {milestones.map((m, i) => (
+          <div key={m.id} className="relative flex items-center gap-6">
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border-2 border-white z-10 ${m.status === 'Completed' ? 'bg-violet-600 text-white' : m.status === 'In Progress' ? 'bg-blue-500 text-white' : m.status === 'Blocked' ? 'bg-rose-500 text-white' : 'bg-slate-200 text-slate-400'}`}>
+               <Flag size={18} />
+            </div>
+            
+            <div className="flex-1 bg-slate-50 border border-slate-100 p-5 rounded-2xl flex items-center justify-between">
+               <div>
+                  <h4 className="text-sm font-bold text-slate-900">{m.title}</h4>
+                  <div className="flex items-center gap-3 mt-2">
+                     <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-md ${m.status === 'Completed' ? 'bg-emerald-100 text-emerald-700' : m.status === 'In Progress' ? 'bg-blue-100 text-blue-700' : m.status === 'Blocked' ? 'bg-rose-100 text-rose-700' : 'bg-slate-200 text-slate-600'}`}>
+                        {m.status}
+                     </span>
+                     <span className="text-[10px] font-bold text-slate-500 flex items-center gap-1"><Clock size={12}/> Due {m.date}</span>
+                  </div>
+               </div>
+               
+               <div className="w-48 text-right hidden md:block">
+                  <div className="flex items-center justify-between mb-1">
+                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Progress</span>
+                     <span className="text-xs font-bold text-slate-900">{m.progress}%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                     <div className={`h-full ${m.status === 'Blocked' ? 'bg-rose-500' : 'bg-violet-600'}`} style={{ width: `${m.progress}%` }}></div>
+                  </div>
+               </div>
+            </div>
+            
+            {i < milestones.length - 1 && (
+               <div className="hidden lg:flex items-center text-slate-300 absolute -bottom-6 left-5 translate-x-4 z-0">
+                  <ArrowRight size={14} className="rotate-90" />
+               </div>
+            )}
+          </div>
+        ))}
       </div>
     </div>
   );
