@@ -1,0 +1,13 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { FinanceDashboard } from '../../components/finance/FinanceDashboard';
+---
+
+<DashboardLayout title="Finance & Billing | BPA PRO">
+  <div class="mb-8">
+    <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-2">Finance & <span class="text-emerald-500">Billing</span></h1>
+    <p class="text-slate-500 font-medium">Manage MRR, track project profitability, and process invoices.</p>
+  </div>
+  
+  <FinanceDashboard client:load />
+</DashboardLayout>

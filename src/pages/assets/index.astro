@@ -1,0 +1,13 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { AssetManager } from '../../components/operations/AssetManager';
+---
+
+<DashboardLayout title="Asset Management | BPA PRO">
+  <div class="mb-8">
+    <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-2">Asset <span class="text-blue-500">Management</span></h1>
+    <p class="text-slate-500 font-medium">Track hardware inventory and cloud software licenses.</p>
+  </div>
+  
+  <AssetManager client:load />
+</DashboardLayout>

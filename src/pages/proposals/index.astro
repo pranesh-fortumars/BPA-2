@@ -1,0 +1,13 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { ProposalManager } from '../../components/commercial/ProposalManager';
+---
+
+<DashboardLayout title="Proposals | BPA PRO">
+  <div class="mb-8">
+    <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-2">Commercial <span class="text-violet-600">Proposals</span></h1>
+    <p class="text-slate-500 font-medium">Generate, track, and manage sales proposals.</p>
+  </div>
+  
+  <ProposalManager client:load />
+</DashboardLayout>

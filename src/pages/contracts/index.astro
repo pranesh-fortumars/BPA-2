@@ -1,0 +1,13 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { ContractManager } from '../../components/commercial/ContractManager';
+---
+
+<DashboardLayout title="Contracts | BPA PRO">
+  <div class="mb-8">
+    <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-2">Contract <span class="text-amber-500">Repository</span></h1>
+    <p class="text-slate-500 font-medium">Manage MSAs, NDAs, SOWs, and track expirations securely.</p>
+  </div>
+  
+  <ContractManager client:load />
+</DashboardLayout>

@@ -26,7 +26,11 @@ import {
   FolderKanban,
   GraduationCap,
   Calendar,
-  Inbox
+  Inbox,
+  Landmark,
+  FileSignature,
+  Send,
+  Laptop
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@nanostores/react';
@@ -38,6 +42,13 @@ const executiveItems = [
 
 const crmItems = [
   { icon: Users2, label: 'CRM & Sales', path: '/crm', color: 'text-blue-500' },
+];
+
+const commercialItems = [
+  { icon: Landmark, label: 'Finance & Billing', path: '/finance', color: 'text-emerald-500' },
+  { icon: Send, label: 'Proposals', path: '/proposals', color: 'text-violet-500' },
+  { icon: FileSignature, label: 'Contracts', path: '/contracts', color: 'text-amber-500' },
+  { icon: Laptop, label: 'Asset Management', path: '/assets', color: 'text-blue-500' },
 ];
 
 const menuItems = [
@@ -75,7 +86,7 @@ export const Sidebar = () => {
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
   
   const getActiveItem = () => {
-    const allItems = [...executiveItems, ...crmItems, ...menuItems, ...hrItems, ...analyticItems, ...adminItems];
+    const allItems = [...executiveItems, ...crmItems, ...commercialItems, ...menuItems, ...hrItems, ...analyticItems, ...adminItems];
     // Robust path normalization for dynamic matching
     const normalizedPath = currentPath.replace(/\/$/, "");
     let match = allItems.find(item => {
@@ -111,6 +122,8 @@ export const Sidebar = () => {
         return ['Finance Manager'].includes(role);
       case 'CRM':
         return ['Sales Director'].includes(role);
+      case 'Commercial':
+        return ['Sales Director', 'Finance Manager', 'HR Admin'].includes(role);
       case 'Workspace':
         return ['Sales Director', 'HR Admin', 'Lead Engineer', 'Developer', 'Project Manager', 'Client', 'Designer', 'Finance Manager'].includes(role);
       case 'HR':
@@ -212,6 +225,22 @@ export const Sidebar = () => {
             {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Client Ecosystem</p>}
             <div className="space-y-1">
               {crmItems.map((item) => (
+                <SidebarItem 
+                  key={item.label}
+                  {...item}
+                  isActive={activeItem === item.label}
+                  isCollapsed={isCollapsed}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {hasAccess('Commercial') && (
+          <div className="pt-4 border-t border-slate-100 mt-4">
+            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Commercial Hub</p>}
+            <div className="space-y-1">
+              {commercialItems.map((item) => (
                 <SidebarItem 
                   key={item.label}
                   {...item}

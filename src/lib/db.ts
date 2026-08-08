@@ -6,7 +6,7 @@
  */
 
 const DB_NAME = 'bpa_pro_db';
-const DB_VERSION = 5;
+const DB_VERSION = 6;
 
 // A simple promise-based IndexedDB wrapper
 export const initDB = (): Promise<IDBDatabase> => {
@@ -41,6 +41,13 @@ export const initDB = (): Promise<IDBDatabase> => {
       if (!db.objectStoreNames.contains('workflows')) db.createObjectStore('workflows', { keyPath: 'id' });
       if (!db.objectStoreNames.contains('approvals')) db.createObjectStore('approvals', { keyPath: 'id' });
       if (!db.objectStoreNames.contains('events')) db.createObjectStore('events', { keyPath: 'id' });
+
+      // Phase 3 Commercial Stores
+      if (!db.objectStoreNames.contains('proposals')) db.createObjectStore('proposals', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('contracts')) db.createObjectStore('contracts', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('invoices')) db.createObjectStore('invoices', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('assets')) db.createObjectStore('assets', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('vendors')) db.createObjectStore('vendors', { keyPath: 'id' });
     };
   });
 };
