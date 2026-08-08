@@ -1,53 +1,103 @@
-# Blueprint: Enterprise-Grade BPA Application (BPA-Pro)
+# BPA PRO: Enterprise Operating System Blueprint
 
 ## Overview
-BPA-Pro is a high-performance, scalable, and secure Business Process Automation platform designed for modern corporate organizations. It leverages Astro's **Islands Architecture** for lightning-fast delivery and **React** for complex interactive modules like the workflow builder and real-time dashboards.
+BPA PRO is a serious enterprise Business Process Automation + Agency ERP platform designed as the ultimate Business Operating System for agencies like FortuMars. It provides a seamless transition from sales → client → proposal → project → employees → finance → support → reporting → automation.
 
-## Project Outline
+## Core Architecture & Data Strategy
+The application utilizes an **Islands Architecture (Astro + React)** with a **Frontend-First/Local-Data Approach**. 
+All modules interact with a common data/service layer (`DataService` via IndexedDB). This allows the entire application to be built, tested, and populated with realistic demo data locally, with the capability to later seamlessly connect to Firestore without redesigning the UI or application structure.
 
-### 1. Visual Design & Experience
-*   **Aesthetics**: Glassmorphism, deep layered shadows, and high-frequency noise textures for a premium tactile feel.
-*   **Color Palette**: 
-    - `Primary`: Deep Indigo (#4F46E5) to Electric Blue (#0EA5E9)
-    - `Surface`: Slate-900 (Dark), Slate-50 (Light) with 40-70% opacity glass effects.
-    - `Accents`: Emerald for success, Rose for alerts, Amber for warnings.
-*   **Typography**: `Inter` for general UI, `Outfit` for display headings.
-*   **Interactivity**: Framer Motion for micro-animations, hover "glow" effects, and smooth page transitions.
+```mermaid
+graph TD
+    %% Architecture Roadmap
+    subgraph Execution Layer
+        Exec[Executive Command Center]
+        CRM[CRM & Sales]
+        Ops[Operations & Projects]
+        HR[HR & Recruitment]
+        Finance[Finance & Billing]
+        Support[Helpdesk & Tickets]
+    end
 
-### 2. Core Architecture
-*   **Workflow Engine**: Powered by `React Flow`, allowing drag-and-drop orchestration of business logic.
-*   **State Management**: `Nano Stores` for cross-framework state sharing (e.g., between Astro components and React islands).
-*   **Analytics**: `Recharts` for dynamic, data-dense SVG visualizations.
-*   **Security**: Role-Based Access Control (RBAC) integrated into the layout layer.
+    subgraph Intelligence & Automation
+        AI[AI Copilot & Process Intelligence]
+        Auto[Workflow Automation Engine]
+        Integrations[API / Webhooks Gateway]
+    end
 
-### 3. Detailed Features
-*   **AI Process Intelligence**: Predicts bottlenecks and suggests optimal routing.
-*   **No-Code Builder**: Administrative interface for visual workflow construction.
-*   **Smart Task Management**: Load-balanced assignment with priority queuing.
-*   **Department Hubs**: Specialized views for HR, Finance, Operations, and Customer Support.
-*   **Real-Time Collaboration**: Contextual comments and task-based mentions.
+    subgraph Data Platform
+        Local[Local IndexedDB]
+        Sync[Sync Engine]
+        Cloud[(Firestore)]
+    end
+
+    Exec --> AI
+    CRM --> AI
+    Ops --> AI
+    HR --> AI
+    Finance --> AI
+    Support --> AI
+
+    AI --> Auto
+    Auto --> Integrations
+
+    Execution Layer --> Local
+    Intelligence & Automation --> Local
+    Local <--> Sync
+    Sync <--> Cloud
+```
 
 ---
 
-## Current Plan: Iteration 2 - Foundation & Global Design System
+## The 5-Phase Development Roadmap
 
-### Goal
-Establish the visual and structural "skeleton" of the application, including the layout and global styles.
+### 🎯 Phase 1 — Foundation (Current Priority)
+**Focus:** Core identity, organization structure, and foundational CRM.
+- Auth + Role-Based Access Control (RBAC) Engine
+- Organization & Departments Hierarchy
+- Employee & Client Profiles
+- CRM & Lead Management
+- Global Dashboards
+- Notification & Alert Center
+- Audit Logging
 
-### Steps
-1.  **Configure Tailwind 4.0**: Set up custom design tokens in `src/styles/global.css`.
-2.  **Develop `MainLayout.astro`**: Create a responsive container with a premium Sidebar and Navigation.
-3.  **Create Core UI Components (React)**:
-    - `GlassCard`: The base for all dashboard widgets.
-    - `Sidebar`: Collapsible, high-fidelity navigation.
-    - `TopBar`: Identity and universal search.
-4.  **Revamp Landing Page (`index.astro`)**: High-impact "wow" landing page.
-5.  **Initialize Dashboard Hub**: Create `src/pages/dashboard/index.astro`.
+### ⚙️ Phase 2 — Operations
+**Focus:** Project delivery, workflow execution, and internal operations.
+- Project & Task Management (Kanban, Gantt)
+- Calendar & Resource Planning
+- Document Management (Company Knowledge Base)
+- Approval Management Inbox
+- Business Process Workflow Builder (Heart of the application)
 
-### Progress Monitoring
-- [x] Initial Project Setup
-- [x] Dependency Installation (In-progress)
-- [ ] Design System Implementation
-- [ ] Layout Architecture
-- [ ] Dashboard Widgets
-- [ ] Workflow Builder Preview
+### 💰 Phase 3 — Commercial
+**Focus:** Revenue operations, financial tracking, and vendor management.
+- Proposal & Quotation Management
+- Contract Lifecycle Management
+- Invoicing, Expenses, and Payments
+- Project Profitability & Costing
+- Procurement & Vendor Management
+- Asset Management
+
+### 🧠 Phase 4 — Intelligence
+**Focus:** AI integration, analytics, and process optimization.
+- AI Project Manager & Command Center
+- AI Workflow Generator
+- Process Intelligence (Bottleneck detection)
+- Predictive Analytics
+- Automation ROI Tracking
+- Employee Performance Intelligence
+
+### 🏢 Phase 5 — Enterprise
+**Focus:** Extensibility, external portals, and mobility.
+- Client 360° Portal
+- Integration Hub & Automation Marketplace
+- API & Webhook Gateway
+- Custom Forms & Module Builder
+- Dynamic Report Builder
+- Mobile Application
+
+---
+
+## Detailed Feature Specifications
+
+*(This section will be expanded as individual phases are implemented. It encompasses the 40 extensive feature domains outlined in the master vision, including Smart Escalation Engines, Global Search, Custom Module Builders, and the AI Copilot.)*

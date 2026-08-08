@@ -12,21 +12,22 @@ import {
   Phone,
   Calendar,
   CheckCircle2,
-  X
+  X,
+  Clock
 } from 'lucide-react';
 import { DataService } from '../../lib/db';
 
 const initialLeads = [
-  { id: '1', name: 'Acme Corp', contact: 'John Doe', stage: 'lead', score: 92, value: '₹12,000' },
-  { id: '2', name: 'Global Tech', contact: 'Sarah Smith', stage: 'opportunity', score: 78, value: '₹45,000' },
-  { id: '3', name: 'Stark Industries', contact: 'Tony Stark', stage: 'proposal', score: 95, value: '₹150,000' },
-  { id: '4', name: 'Wayne Ent', contact: 'Bruce Wayne', stage: 'negotiation', score: 88, value: '₹80,000' },
+  { id: '1', name: 'Acme Corp', contact: 'John Doe', stage: 'lead', score: 92, value: '₹12,000', assignee: 'Priya (Enterprise)' },
+  { id: '2', name: 'Global Tech', contact: 'Sarah Smith', stage: 'opportunity', score: 78, value: '₹45,000', assignee: 'Ravi (Mid-Market)' },
+  { id: '3', name: 'Stark Industries', contact: 'Tony Stark', stage: 'proposal', score: 95, value: '₹150,000', assignee: 'Priya (Enterprise)' },
+  { id: '4', name: 'Wayne Ent', contact: 'Bruce Wayne', stage: 'negotiation', score: 88, value: '₹80,000', assignee: 'Ravi (Mid-Market)' },
 ];
 
 export const CRMDashboard = () => {
   const [leads, setLeads] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [newLead, setNewLead] = useState({ name: '', contact: '', value: '', stage: 'lead' });
+  const [newLead, setNewLead] = useState({ name: '', contact: '', value: '', stage: 'lead', assignee: 'Auto-Routing...' });
 
   useEffect(() => {
     const loadData = async () => {
@@ -45,18 +46,20 @@ export const CRMDashboard = () => {
 
   const handleAddLead = async (e: React.FormEvent) => {
     e.preventDefault();
+    const score = Math.floor(Math.random() * 40) + 50;
     const lead = {
       id: Math.random().toString(36).substr(2, 9),
       name: newLead.name,
       contact: newLead.contact,
       value: `₹${newLead.value}`,
       stage: newLead.stage,
-      score: Math.floor(Math.random() * 40) + 50 // Random AI score between 50-90
+      score,
+      assignee: parseInt(newLead.value) > 100000 ? 'Priya (Enterprise)' : 'Ravi (SMB)'
     };
     await DataService.save('leads', lead);
     setLeads([...leads, lead]);
     setShowModal(false);
-    setNewLead({ name: '', contact: '', value: '', stage: 'lead' });
+    setNewLead({ name: '', contact: '', value: '', stage: 'lead', assignee: 'Auto-Routing...' });
   };
 
   return (
@@ -133,6 +136,35 @@ export const CRMDashboard = () => {
                 <ActionBtn icon={Mail} label="Email Sequence" color="text-blue-600" bg="bg-blue-50" />
                 <ActionBtn icon={Phone} label="Log Call" color="text-emerald-600" bg="bg-emerald-50" />
                 <ActionBtn icon={Calendar} label="Schedule Meeting" color="text-amber-600" bg="bg-amber-50" />
+             </div>
+          </div>
+
+          {/* Interaction History */}
+          <div className="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm">
+             <h3 className="text-sm font-black uppercase tracking-widest text-slate-900 mb-6 flex items-center gap-2">
+                <Clock size={16} className="text-violet-600" /> Recent Interactions
+             </h3>
+             <div className="space-y-4">
+                <div className="flex gap-3">
+                   <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                      <Mail size={14} />
+                   </div>
+                   <div>
+                      <p className="text-xs font-bold text-slate-900">Email sent to Tony Stark</p>
+                      <p className="text-[10px] text-slate-500 font-medium mt-0.5">Subject: Proposal Revision v2</p>
+                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mt-1">10 mins ago</p>
+                   </div>
+                </div>
+                <div className="flex gap-3">
+                   <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                      <Phone size={14} />
+                   </div>
+                   <div>
+                      <p className="text-xs font-bold text-slate-900">Call with Sarah Smith</p>
+                      <p className="text-[10px] text-slate-500 font-medium mt-0.5">Discussed tech requirements.</p>
+                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mt-1">2 hours ago</p>
+                   </div>
+                </div>
              </div>
           </div>
         </div>
@@ -218,7 +250,10 @@ const PipelineColumn = ({ title, leads }: { title: string, leads: any[] }) => (
             <h5 className="text-sm font-bold text-slate-900">{lead.name}</h5>
             <button className="text-slate-400 hover:text-slate-900"><MoreVertical size={14}/></button>
           </div>
-          <p className="text-xs text-slate-500 font-medium mb-3">{lead.contact}</p>
+          <p className="text-xs text-slate-500 font-medium mb-1">{lead.contact}</p>
+          <p className="text-[9px] font-black uppercase tracking-widest text-slate-400 mb-3 flex items-center gap-1">
+             <Users size={10} /> {lead.assignee}
+          </p>
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
              <span className="text-xs font-black text-emerald-600">{lead.value}</span>
              <div className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-slate-400">

@@ -6,7 +6,7 @@
  */
 
 const DB_NAME = 'bpa_pro_db';
-const DB_VERSION = 3;
+const DB_VERSION = 4;
 
 // A simple promise-based IndexedDB wrapper
 export const initDB = (): Promise<IDBDatabase> => {
@@ -29,6 +29,13 @@ export const initDB = (): Promise<IDBDatabase> => {
       if (!db.objectStoreNames.contains('tasks')) db.createObjectStore('tasks', { keyPath: 'id' });
       if (!db.objectStoreNames.contains('documents')) db.createObjectStore('documents', { keyPath: 'id' });
       if (!db.objectStoreNames.contains('integrations')) db.createObjectStore('integrations', { keyPath: 'id' });
+      
+      // Phase 1 Foundation Stores
+      if (!db.objectStoreNames.contains('organizations')) db.createObjectStore('organizations', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('employees')) db.createObjectStore('employees', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('clients')) db.createObjectStore('clients', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('audit_logs')) db.createObjectStore('audit_logs', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('notifications')) db.createObjectStore('notifications', { keyPath: 'id' });
     };
   });
 };
@@ -72,7 +79,7 @@ export const DataService = {
         }
     },
 
-    async save<T extends { id: string }>(collection: string, data: T): Promise<void> {
+    async saveRaw<T extends { id: string }>(collection: string, data: T): Promise<void> {
         try {
             const db = await getDB();
             return new Promise((resolve, reject) => {
@@ -88,10 +95,19 @@ export const DataService = {
         }
     },
 
+    async save<T extends { id: string }>(collection: string, data: T): Promise<void> {
+        await this.saveRaw(collection, data);
+        if (collection !== 'audit_logs' && collection !== 'notifications') {
+            import('./audit').then(({ AuditService }) => {
+               AuditService.log('UPDATE', collection, `Saved record ${data.id}`, data.id);
+            });
+        }
+    },
+
     async delete(collection: string, id: string): Promise<void> {
         try {
             const db = await getDB();
-            return new Promise((resolve, reject) => {
+            await new Promise<void>((resolve, reject) => {
                 const transaction = db.transaction(collection, 'readwrite');
                 const store = transaction.objectStore(collection);
                 const request = store.delete(id);
@@ -99,6 +115,12 @@ export const DataService = {
                 request.onerror = () => reject(request.error);
                 request.onsuccess = () => resolve();
             });
+            
+            if (collection !== 'audit_logs' && collection !== 'notifications') {
+                import('./audit').then(({ AuditService }) => {
+                   AuditService.log('DELETE', collection, `Deleted record ${id}`, id);
+                });
+            }
         } catch (e) {
             console.warn("DB Error", e);
         }

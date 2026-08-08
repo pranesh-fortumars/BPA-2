@@ -3,6 +3,7 @@ import { useStore } from '@nanostores/react';
 import { currentUser, logoutUser } from '../../store/authStore';
 import { User, LogOut } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { AlertCenter } from '../notifications/AlertCenter';
 
 export const TopbarUser = () => {
   const user = useStore(currentUser);
@@ -24,9 +25,11 @@ export const TopbarUser = () => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative flex items-center gap-4">
+      <AlertCenter />
+      
       <div 
-        className="flex items-center gap-4 pl-8 border-l border-slate-100 ml-4 group cursor-pointer"
+        className="flex items-center gap-4 pl-4 lg:pl-8 border-l border-slate-100 ml-2 lg:ml-4 group cursor-pointer"
         onClick={() => setShowMenu(!showMenu)}
       >
          <div className="text-right hidden xl:block">
