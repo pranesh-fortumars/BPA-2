@@ -15,7 +15,7 @@ export const initDB = (): Promise<IDBDatabase> => {
         return reject(new Error("IndexedDB is not available on the server"));
     }
 
-    const request = indexedDB.open(DB_NAME, DB_VERSION);
+    const request = indexedDB.open(DB_NAME, DB_VERSION + 1); // incremented version
 
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
@@ -29,6 +29,10 @@ export const initDB = (): Promise<IDBDatabase> => {
       if (!db.objectStoreNames.contains('tasks')) db.createObjectStore('tasks', { keyPath: 'id' });
       if (!db.objectStoreNames.contains('documents')) db.createObjectStore('documents', { keyPath: 'id' });
       if (!db.objectStoreNames.contains('integrations')) db.createObjectStore('integrations', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('processes')) db.createObjectStore('processes', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('process_instances')) db.createObjectStore('process_instances', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('alerts')) db.createObjectStore('alerts', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('activities')) db.createObjectStore('activities', { keyPath: 'id' });
       
       // Phase 1 Foundation Stores
       if (!db.objectStoreNames.contains('organizations')) db.createObjectStore('organizations', { keyPath: 'id' });

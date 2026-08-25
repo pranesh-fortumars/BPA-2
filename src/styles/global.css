@@ -2,39 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 15, 23, 42;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 255, 255, 255;
+@layer base {
+  :root {
+    /* Light Theme (Fallback/Optional) */
+    --background: 248 250 252; /* slate-50 */
+    --surface: 255 255 255;
+    --surface-elevated: 241 245 249; /* slate-100 */
+    --border: 226 232 240; /* slate-200 */
+    
+    --primary: 139 92 246; /* violet-500 */
+    --primary-foreground: 255 255 255;
+    
+    --secondary: 59 130 246; /* blue-500 */
+    --secondary-foreground: 255 255 255;
+    
+    --foreground: 15 23 42; /* slate-900 */
+    --muted: 100 116 139; /* slate-500 */
+    
+    --success: 16 185 129; /* emerald-500 */
+    --warning: 245 158 11; /* amber-500 */
+    --critical: 239 68 68; /* red-500 */
+    --info: 6 182 212; /* cyan-500 */
+    
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(0, 0, 0, 0.05);
+  }
   
-  /* Amethyst Enterprise Primary */
-  --primary-rgb: 124, 58, 237; /* violet-600 */
-  --primary-accent: 139, 92, 246; /* violet-500 */
-  
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(0, 0, 0, 0.04);
-  --glass-shadow: 0 4px 30px -5px rgba(0, 0, 0, 0.03), 0 10px 20px -5px rgba(0, 0, 0, 0.02);
-}
-
-/* Pure White Theme Lockdown */
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 255, 255, 255;
-  
-  /* Amethyst Enterprise Primary */
-  --primary-rgb: 124, 58, 237; /* violet-600 */
-  --primary-accent: 139, 92, 246; /* violet-500 */
-  
-  --glass-bg: rgba(255, 255, 255, 1);
-  --glass-border: rgba(0, 0, 0, 0.04);
-  --glass-shadow: 0 4px 30px -5px rgba(0, 0, 0, 0.03), 0 10px 20px -5px rgba(0, 0, 0, 0.02);
+  .dark {
+    /* Premium Dark Enterprise Theme */
+    --background: 15 23 42; /* slate-900 - Deep navy/charcoal */
+    --surface: 30 41 59; /* slate-800 */
+    --surface-elevated: 51 65 85; /* slate-700 */
+    --border: 51 65 85; /* slate-700 */
+    
+    --primary: 139 92 246; /* violet-500 - Primary accent */
+    --primary-foreground: 255 255 255;
+    
+    --secondary: 59 130 246; /* blue-500 - Secondary accent */
+    --secondary-foreground: 255 255 255;
+    
+    --foreground: 248 250 252; /* slate-50 */
+    --muted: 148 163 184; /* slate-400 */
+    
+    --success: 16 185 129; /* emerald-500 */
+    --warning: 245 158 11; /* amber-500 */
+    --critical: 239 68 68; /* red-500 */
+    --info: 6 182 212; /* cyan-500 */
+    
+    --glass-bg: rgba(30, 41, 59, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.1);
+  }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background-color: rgb(var(--background-start-rgb));
-  min-height: 100vh;
+  @apply bg-background text-foreground antialiased min-h-screen;
 }
 
 /* Custom noise texture overlay */
@@ -46,7 +67,7 @@ body::before {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  opacity: 0.04;
+  opacity: 0.02;
   z-index: 9999;
   background-image: url("https://grainy-gradients.vercel.app/noise.svg");
   mix-blend-mode: overlay;
@@ -57,50 +78,19 @@ body::before {
     @apply backdrop-blur-md;
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
   }
 }
 
 .custom-scrollbar::-webkit-scrollbar {
   width: 5px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  @apply bg-slate-200 dark:bg-slate-700;
   border-radius: 10px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Shimmer animation */
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-.animate-shimmer {
-  position: relative;
-  overflow: hidden;
-}
-
-.animate-shimmer::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.05),
-    transparent
-  );
-  animation: shimmer 2s infinite;
+  @apply bg-slate-300 dark:bg-slate-600;
 }

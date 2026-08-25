@@ -10,7 +10,7 @@ const { title = "BPA Pro - Enterprise Automation", isLanding = false } = Astro.p
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content="Enterprise-grade Business Process Automation platform for corporate efficiency." />
@@ -21,28 +21,20 @@ const { title = "BPA Pro - Enterprise Automation", isLanding = false } = Astro.p
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Client-side theme initialization -->
+    <script is:inline>
+      const theme = localStorage.getItem('bpa-theme');
+      if (theme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else if (theme === 'dark' || !theme) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
 	</head>
-	<body class="bg-white overflow-x-hidden antialiased selection:bg-violet-100 selection:text-violet-900">
+	<body class="bg-background text-foreground overflow-x-hidden antialiased selection:bg-primary/20 selection:text-primary">
     <slot />
 	</body>
 </html>
-
-<style is:global>
-	:root {
-		--accent: 124, 58, 237;
-		--accent-light: 167, 139, 250;
-		--accent-dark: 109, 40, 217;
-		--accent-gradient: linear-gradient(
-			45deg,
-			rgb(var(--accent)),
-			rgb(var(--accent-light)) 30%,
-			white 60%
-		);
-	}
-	html {
-		background: #ffffff;
-      color: #0f172a;
-	}
-</style>
 
 

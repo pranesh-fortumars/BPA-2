@@ -1,65 +1,10 @@
 ---
 import DashboardLayout from '../../layouts/DashboardLayout.astro';
-import { DashboardWidgets } from '../../components/DashboardWidgets';
-import { TasksView } from '../../components/TasksView';
+import { CommandCenter } from '../../components/dashboard/CommandCenter';
 ---
 
-<DashboardLayout title="Operational Dashboard">
-  <div class="space-y-12">
-    <!-- Header Section -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-2 border-b border-slate-200">
-      <div>
-         <div class="flex items-center gap-2 text-[10px] font-black text-violet-500 uppercase tracking-widest mb-3">
-            <span>Enterprise</span>
-            <span class="text-slate-300">/</span>
-            <span class="text-slate-600">Command Center</span>
-         </div>
-         <div class="flex items-center gap-6">
-            <h1 class="text-4xl font-black text-slate-900 tracking-tighter uppercase">Process Intelligence</h1>
-            <div class="flex -space-x-3 items-center">
-               {[1, 2, 3].map(i => (
-                  <div class="w-8 h-8 rounded-full border-2 border-white bg-white overflow-hidden shadow-sm">
-                     <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=user${i}`} alt="Team Member" />
-                  </div>
-               ))}
-               <div class="w-8 h-8 rounded-full border-2 border-white bg-white flex items-center justify-center text-[10px] font-black text-slate-700 shadow-sm">
-                  +12
-               </div>
-               <span class="ml-4 text-[10px] font-black text-slate-600 uppercase tracking-widest">Active Ops Team</span>
-            </div>
-         </div>
-      </div>
-      
-      <div class="flex items-center gap-3">
-         <button class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-600 text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all shadow-sm">
-            Refine View
-         </button>
-         <button class="px-5 py-2.5 rounded-xl bg-violet-600 text-white text-[10px] font-black uppercase tracking-widest hover:bg-violet-500 transition-all shadow-lg shadow-violet-600/20">
-            New Automation
-         </button>
-      </div>
-    </div>
-
-    <!-- Main Dashboard Metrics and Charts -->
-    <section>
-      <DashboardWidgets client:load />
-    </section>
-
-    <!-- Detailed Task Management -->
-    <section>
-      <div class="mb-8 p-6 bg-white border border-slate-100 rounded-2xl flex justify-between items-center">
-        <div>
-           <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tighter">Workflow Execution Queue</h2>
-           <p class="text-slate-700 text-sm font-medium">Real-time status of all active BPA processes</p>
-        </div>
-        <div class="flex gap-2">
-           <div class="px-4 py-2 rounded-lg bg-white text-[10px] font-black text-slate-700 uppercase">Total Items: 59</div>
-           <div class="px-4 py-2 rounded-lg bg-emerald-50 text-[10px] font-black text-emerald-600 uppercase tracking-widest">System Healthy</div>
-        </div>
-      </div>
-      <TasksView client:load />
-    </section>
-  </div>
+<DashboardLayout title="Command Center">
+  <CommandCenter client:load />
 </DashboardLayout>
 
 

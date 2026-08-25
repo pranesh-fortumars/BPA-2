@@ -30,71 +30,88 @@ import {
   Landmark,
   FileSignature,
   Send,
-  Laptop
+  Laptop,
+  Cpu,
+  Database,
+  TerminalSquare,
+  Scale,
+  CloudCog,
+  GanttChartSquare,
+  ListTodo,
+  Boxes
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore } from '@nanostores/react';
 import { currentUser, logoutUser } from '../store/authStore';
 
-const executiveItems = [
-  { icon: Activity, label: 'Executive Center', path: '/executive', color: 'text-rose-500' },
+// COMMAND CENTER
+const commandCenterItems = [
+  { icon: LayoutDashboard, label: 'Command Center', path: '/dashboard', color: 'text-violet-500' },
 ];
 
-const crmItems = [
-  { icon: Users2, label: 'CRM & Sales', path: '/crm', color: 'text-blue-500' },
+// PROCESS
+const processItems = [
+  { icon: BarChart3, label: 'Process Intelligence', path: '/analytics', color: 'text-blue-400' },
+  { icon: Workflow, label: 'Process Designer', path: '/builder', color: 'text-emerald-500' },
+  { icon: GanttChartSquare, label: 'Process Instances', path: '/instances', color: 'text-amber-500' },
+  { icon: CheckSquare, label: 'Human Tasks & Approvals', path: '/tasks', color: 'text-rose-500' },
 ];
 
-const commercialItems = [
-  { icon: Landmark, label: 'Finance & Billing', path: '/finance', color: 'text-emerald-500' },
-  { icon: Send, label: 'Proposals', path: '/proposals', color: 'text-violet-500' },
-  { icon: FileSignature, label: 'Contracts', path: '/contracts', color: 'text-amber-500' },
-  { icon: Laptop, label: 'Asset Management', path: '/assets', color: 'text-blue-500' },
+// AUTOMATION
+const automationItems = [
+  { icon: Zap, label: 'Automations', path: '/automations', color: 'text-violet-400' },
+  { icon: Bot, label: 'AI Agents', path: '/agents', color: 'text-cyan-400' },
+  { icon: Cpu, label: 'RPA Workforce', path: '/rpa', color: 'text-blue-500' },
+  { icon: FileText, label: 'Document Intelligence', path: '/documents', color: 'text-amber-400' },
 ];
 
-const menuItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard', color: 'text-violet-500' },
-  { icon: FolderKanban, label: 'Project Delivery', path: '/projects', color: 'text-blue-600' },
-  { icon: Workflow, label: 'Orchestration Studio', path: '/builder', color: 'text-purple-500' },
-  { icon: Bot, label: 'AI Agent Fleets', path: '/agents', color: 'text-emerald-500' },
-  { icon: FileText, label: 'Neural Documents', path: '/documents', color: 'text-amber-500' },
-  { icon: Network, label: 'Integration Hub', path: '/integrations', color: 'text-rose-500' },
-  { icon: CheckSquare, label: 'My Tasks', path: '/tasks', color: 'text-blue-500' },
+// BUILD & CONNECT
+const buildItems = [
+  { icon: Network, label: 'Integration Hub', path: '/integrations', color: 'text-rose-400' },
+  { icon: TerminalSquare, label: 'API & Webhooks', path: '/api', color: 'text-emerald-400' },
+  { icon: Scale, label: 'Rules & Decisions', path: '/rules', color: 'text-violet-500' },
+  { icon: Calendar, label: 'Schedules', path: '/schedules', color: 'text-blue-400' },
 ];
 
-const hrItems = [
-  { icon: GraduationCap, label: 'HR & Talent', path: '/hr', color: 'text-emerald-500' },
-  { icon: Calendar, label: 'Resource Planner', path: '/planner', color: 'text-amber-500' },
-  { icon: Inbox, label: 'Approval Inbox', path: '/approvals', color: 'text-rose-500' },
+// INSIGHTS
+const insightItems = [
+  { icon: PieChart, label: 'Analytics & ROI', path: '/roi', color: 'text-emerald-500' },
+  { icon: Activity, label: 'Performance Intelligence', path: '/performance', color: 'text-amber-500' },
+  { icon: BrainCircuit, label: 'AI Copilot', path: '/copilot', color: 'text-violet-400' },
 ];
+// Hack for lucide icon
+const BrainCircuit = CloudCog;
 
-const analyticItems = [
-  { icon: BarChart3, label: 'Process Intelligence', path: '/analytics', color: 'text-violet-400' },
-  { icon: Layers, label: 'Departmental', path: '/departments', color: 'text-slate-600' },
-];
-
-const adminItems = [
+// GOVERNANCE
+const governanceItems = [
+  { icon: ClipboardList, label: 'Audit Center', path: '/audit' },
   { icon: ShieldCheck, label: 'Security & Access', path: '/security' },
-  { icon: ClipboardList, label: 'Compliance Audit', path: '/audit' },
-  { icon: Settings, label: 'System Settings', path: '/settings' },
+  { icon: Database, label: 'Environments & Deployments', path: '/environments' },
+  { icon: Settings, label: 'Administration', path: '/settings' },
 ];
 
 export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const user = useStore(currentUser);
   
-  // Dynamically determine active item from URL path
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
   
   const getActiveItem = () => {
-    const allItems = [...executiveItems, ...crmItems, ...commercialItems, ...menuItems, ...hrItems, ...analyticItems, ...adminItems];
-    // Robust path normalization for dynamic matching
+    const allItems = [
+      ...commandCenterItems,
+      ...processItems,
+      ...automationItems,
+      ...buildItems,
+      ...insightItems,
+      ...governanceItems
+    ];
+    
     const normalizedPath = currentPath.replace(/\/$/, "");
     let match = allItems.find(item => {
       const normalizedItemPath = (item.path || "").replace(/\/$/, "");
       return normalizedPath === normalizedItemPath;
     });
     
-    // Parent boundary matching for deep routes
     if (!match) {
       match = allItems.find(item => {
         const normalizedItemPath = (item.path || "").replace(/\/$/, "");
@@ -102,7 +119,7 @@ export const Sidebar = () => {
       });
     }
     
-    return match ? match.label : 'Dashboard';
+    return match ? match.label : 'Command Center';
   };
 
   const activeItem = getActiveItem();
@@ -112,244 +129,98 @@ export const Sidebar = () => {
     collapsed: { width: '88px' }
   };
 
-  const hasAccess = (section: string) => {
-    if (!user) return false;
-    const role = user.role;
-    if (role === 'CEO') return true; // CEO sees all
-
-    switch (section) {
-      case 'Executive':
-        return ['Finance Manager'].includes(role);
-      case 'CRM':
-        return ['Sales Director'].includes(role);
-      case 'Commercial':
-        return ['Sales Director', 'Finance Manager', 'HR Admin'].includes(role);
-      case 'Workspace':
-        return ['Sales Director', 'HR Admin', 'Lead Engineer', 'Developer', 'Project Manager', 'Client', 'Designer', 'Finance Manager'].includes(role);
-      case 'HR':
-        return ['HR Admin', 'Project Manager'].includes(role);
-      case 'Analytics':
-        return ['Sales Director', 'Finance Manager'].includes(role);
-      case 'Admin':
-        return false;
-      default:
-        return false;
-    }
-  };
-
-  const filteredMenuItems = menuItems.filter(item => {
-    if (!user) return false;
-    const role = user.role;
-    if (role === 'CEO') return true;
-    if (['Lead Engineer', 'Developer'].includes(role)) {
-      return ['Project Delivery', 'Orchestration Studio', 'AI Agent Fleets', 'Integration Hub', 'My Tasks'].includes(item.label);
-    }
-    if (['HR Admin', 'Sales Director'].includes(role)) {
-      return ['Dashboard', 'My Tasks'].includes(item.label);
-    }
-    if (['Project Manager'].includes(role)) {
-      return ['Dashboard', 'Project Delivery', 'My Tasks'].includes(item.label);
-    }
-    if (['Finance Manager'].includes(role)) {
-      return ['My Tasks'].includes(item.label);
-    }
-    if (['Client', 'Designer'].includes(role)) {
-      return ['Neural Documents', 'My Tasks'].includes(item.label);
-    }
-    return false;
-  });
-
-  const filteredAnalyticItems = analyticItems.filter(item => {
-    if (!user) return false;
-    if (user.role === 'CEO') return true;
-    if (user.role === 'Sales Director') return item.label === 'Process Intelligence';
-    if (user.role === 'Finance Manager') return true;
-    return false;
-  });
-
   return (
     <motion.div 
       initial="expanded"
       animate={isCollapsed ? "collapsed" : "expanded"}
       variants={containerVariants}
-      className="fixed left-0 top-0 h-screen bg-white border-r border-slate-100 text-slate-600 flex flex-col z-50 transition-all duration-300 ease-in-out"
+      className="fixed left-0 top-0 h-screen bg-background border-r border-border text-foreground flex flex-col z-50 transition-all duration-300 ease-in-out"
     >
       {/* Brand area */}
-      <div className="h-20 flex items-center px-6 relative border-b border-slate-50">
+      <div className="h-16 flex items-center px-6 relative border-b border-border bg-surface">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-violet-600/20 flex-shrink-0">
-            <Zap className="text-slate-900 w-6 h-6 fill-current" />
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0">
+             <div className="grid grid-cols-2 gap-[2px]">
+               <div className="w-3 h-3 bg-primary rounded-tl-sm rounded-br-sm"></div>
+               <div className="w-3 h-3 bg-primary/40 rounded-tr-sm rounded-bl-sm"></div>
+               <div className="w-3 h-3 bg-primary/70 rounded-tr-sm rounded-bl-sm"></div>
+               <div className="w-3 h-3 bg-primary rounded-tl-sm rounded-br-sm"></div>
+             </div>
           </div>
           <AnimatePresence>
             {!isCollapsed && (
-              <motion.span 
+              <motion.div 
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -10 }}
-                className="font-bold text-xl tracking-tight text-slate-900 whitespace-nowrap"
+                className="flex flex-col"
               >
-                BPA <span className="text-violet-600">PRO</span>
-              </motion.span>
+                <span className="font-bold text-sm tracking-tight text-foreground whitespace-nowrap uppercase">Cognithorz</span>
+                <span className="text-[9px] text-muted uppercase tracking-widest">Enterprise Automation Platform</span>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>
         
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="absolute -right-3 top-7 w-6 h-6 bg-white rounded-full flex items-center justify-center text-slate-600 border border-slate-200 shadow-md hover:text-violet-600 transition-colors z-50"
+          className="absolute -right-3 top-5 w-6 h-6 bg-surface rounded-full flex items-center justify-center text-muted border border-border shadow-md hover:text-primary transition-colors z-50"
         >
           {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         </button>
       </div>
 
       {/* Main navigation */}
-      <div className="flex-1 py-8 overflow-y-auto custom-scrollbar px-4 space-y-2">
-        {hasAccess('Executive') && (
-          <div className="mb-4">
-            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Executive</p>}
-            <div className="space-y-1">
-              {executiveItems.map((item) => (
-                <SidebarItem 
-                  key={item.label}
-                  {...item}
-                  isActive={activeItem === item.label}
-                  isCollapsed={isCollapsed}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {hasAccess('CRM') && (
-          <div className="pt-4 border-t border-slate-100 mt-4">
-            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Client Ecosystem</p>}
-            <div className="space-y-1">
-              {crmItems.map((item) => (
-                <SidebarItem 
-                  key={item.label}
-                  {...item}
-                  isActive={activeItem === item.label}
-                  isCollapsed={isCollapsed}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {hasAccess('Commercial') && (
-          <div className="pt-4 border-t border-slate-100 mt-4">
-            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Commercial Hub</p>}
-            <div className="space-y-1">
-              {commercialItems.map((item) => (
-                <SidebarItem 
-                  key={item.label}
-                  {...item}
-                  isActive={activeItem === item.label}
-                  isCollapsed={isCollapsed}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {hasAccess('Workspace') && filteredMenuItems.length > 0 && (
-          <div className="pt-4 border-t border-slate-100 mt-4">
-            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Workspace Hub</p>}
-            <div className="space-y-1">
-              {filteredMenuItems.map((item) => (
-                <SidebarItem 
-                  key={item.label}
-                  {...item}
-                  isActive={activeItem === item.label}
-                  isCollapsed={isCollapsed}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {hasAccess('HR') && (
-          <div className="pt-4 border-t border-slate-100 mt-4">
-            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Operations Hub</p>}
-            <div className="space-y-1">
-              {hrItems.map((item) => (
-                <SidebarItem 
-                  key={item.label}
-                  {...item}
-                  isActive={activeItem === item.label}
-                  isCollapsed={isCollapsed}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {hasAccess('Analytics') && filteredAnalyticItems.length > 0 && (
-          <div className="pt-4 border-t border-slate-100 mt-4">
-            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Neural Assets</p>}
-            <div className="space-y-1">
-              {filteredAnalyticItems.map((item) => (
-                <SidebarItem 
-                  key={item.label}
-                  {...item}
-                  isActive={activeItem === item.label}
-                  isCollapsed={isCollapsed}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {hasAccess('Admin') && (
-          <div className="pt-4 border-t border-slate-100 mt-4">
-            {!isCollapsed && <p className="px-3 text-[12px] font-black text-slate-800 uppercase tracking-widest mb-5 opacity-100">Sovereign Control</p>}
-            <div className="space-y-1">
-              {adminItems.map((item) => (
-                <SidebarItem 
-                  key={item.label}
-                  {...item}
-                  isActive={activeItem === item.label}
-                  isCollapsed={isCollapsed}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+      <div className="flex-1 py-6 overflow-y-auto custom-scrollbar px-3 space-y-6">
+        
+        <SidebarSection title="COMMAND CENTER" items={commandCenterItems} activeItem={activeItem} isCollapsed={isCollapsed} />
+        <SidebarSection title="PROCESS" items={processItems} activeItem={activeItem} isCollapsed={isCollapsed} />
+        <SidebarSection title="AUTOMATION" items={automationItems} activeItem={activeItem} isCollapsed={isCollapsed} />
+        <SidebarSection title="BUILD & CONNECT" items={buildItems} activeItem={activeItem} isCollapsed={isCollapsed} />
+        <SidebarSection title="INSIGHTS" items={insightItems} activeItem={activeItem} isCollapsed={isCollapsed} />
+        <SidebarSection title="GOVERNANCE" items={governanceItems} activeItem={activeItem} isCollapsed={isCollapsed} />
+        
       </div>
 
-      {/* User profile & Footer */}
-      <div className="p-4 border-t border-slate-100">
-        <div className={`flex items-center gap-3 p-2 rounded-xl transition-colors hover:bg-slate-50 cursor-pointer ${isCollapsed ? 'justify-center' : ''}`}>
-          <div className={`w-10 h-10 rounded-[1rem] ${user?.avatarColor || 'bg-slate-200'} flex items-center justify-center text-white font-black overflow-hidden shadow-sm flex-shrink-0`}>
-             {user ? user.name.charAt(0) : <UserCheck size={18}/>}
-          </div>
-          {!isCollapsed && (
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-slate-900 truncate">{user ? user.name : 'Unknown User'}</p>
-              <p className="text-[10px] text-violet-500 font-black uppercase tracking-widest truncate mt-0.5">{user ? user.role : 'Guest'}</p>
-            </div>
-          )}
-        </div>
-        {!isCollapsed && (
-          <button 
-            onClick={() => logoutUser()}
-            className="w-full mt-4 flex items-center justify-center gap-2 p-3 rounded-xl text-slate-600 hover:text-rose-600 hover:bg-rose-50 border border-transparent transition-all"
-          >
-            <LogOut size={18} />
-            <span className="text-sm font-bold">Log out</span>
-          </button>
-        )}
+      {/* Footer Area - Collapse Toggle (Optional) */}
+      <div className="p-4 border-t border-border bg-surface">
+         <button 
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="w-full flex items-center gap-3 px-3 py-2 text-muted hover:text-foreground transition-colors rounded-lg hover:bg-surface-elevated"
+         >
+            <ChevronLeft size={18} className={isCollapsed ? "rotate-180 transition-transform" : "transition-transform"} />
+            {!isCollapsed && <span className="text-sm font-medium">Collapse</span>}
+         </button>
       </div>
     </motion.div>
   );
 };
+
+const SidebarSection = ({ title, items, activeItem, isCollapsed }) => {
+   if (items.length === 0) return null;
+   
+   return (
+      <div className="mb-2">
+         {!isCollapsed && <p className="px-3 text-[10px] font-bold text-primary uppercase tracking-widest mb-3">{title}</p>}
+         <div className="space-y-1">
+            {items.map((item) => (
+               <SidebarItem 
+                  key={item.label}
+                  {...item}
+                  isActive={activeItem === item.label}
+                  isCollapsed={isCollapsed}
+               />
+            ))}
+         </div>
+      </div>
+   );
+}
 
 interface SidebarItemProps {
   icon: React.ElementType;
   label: string;
   isActive: boolean;
   isCollapsed: boolean;
-  onClick?: () => void;
   color?: string;
   path?: string;
 }
@@ -359,32 +230,25 @@ const SidebarItem = ({ icon: Icon, label, isActive, isCollapsed, color = "", pat
     <a
       href={path}
       className={`
-        group relative flex items-center gap-4 px-4 py-3.5 rounded-2xl cursor-pointer transition-all duration-300
-        ${isActive ? 'bg-violet-600 text-white shadow-2xl shadow-violet-600/30 ring-1 ring-violet-400/20' : 'text-slate-700 hover:text-violet-600 hover:bg-slate-50'}
+        group relative flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-200
+        ${isActive ? 'bg-primary text-primary-foreground' : 'text-muted hover:text-foreground hover:bg-surface-elevated'}
         ${isCollapsed ? 'justify-center' : ''}
       `}
     >
-      <Icon size={20} className={`${isActive ? 'text-slate-900' : 'text-slate-600 group-hover:text-slate-900'} transition-colors duration-200`} />
+      <Icon size={18} className={`${isActive ? 'text-primary-foreground' : 'text-muted group-hover:text-foreground'} transition-colors duration-200`} />
       
       {!isCollapsed && (
-        <span className={`text-[15px] font-bold whitespace-nowrap overflow-hidden text-ellipsis ${isActive ? 'text-slate-900' : 'text-slate-900 group-hover:text-violet-600'}`}>
+        <span className={`text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis ${isActive ? 'text-primary-foreground' : 'text-foreground'}`}>
           {label}
         </span>
       )}
 
       {/* Tooltip for collapsed view */}
       {isCollapsed && (
-        <div className="absolute left-full ml-6 px-4 py-2 bg-white text-white rounded-lg text-[11px] font-black uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-2xl shadow-slate-900/20 whitespace-nowrap z-50">
-          <div className="absolute left-[-4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-white rotate-45"></div>
+        <div className="absolute left-full ml-4 px-3 py-1.5 bg-surface-elevated text-foreground border border-border rounded-lg text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl whitespace-nowrap z-50">
           {label}
         </div>
       )}
     </a>
   );
 };
-
-
-
-
-
-
