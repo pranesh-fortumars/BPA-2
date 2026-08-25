@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { KPICards } from './KPICards';
 import { ProcessHealthTable } from './ProcessHealthTable';
-import { ProcessActivityFeed } from './ProcessActivityFeed';
 import { CriticalAlerts } from './CriticalAlerts';
 import { CommandCenterCharts } from './CommandCenterCharts';
 import { RecentActivity } from './RecentActivity';

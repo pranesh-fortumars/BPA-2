@@ -73,14 +73,15 @@ const buildItems = [
   { icon: Calendar, label: 'Schedules', path: '/schedules', color: 'text-blue-400' },
 ];
 
+// Hack for lucide icon
+const BrainCircuit = CloudCog;
+
 // INSIGHTS
 const insightItems = [
   { icon: PieChart, label: 'Analytics & ROI', path: '/roi', color: 'text-emerald-500' },
   { icon: Activity, label: 'Performance Intelligence', path: '/performance', color: 'text-amber-500' },
   { icon: BrainCircuit, label: 'AI Copilot', path: '/copilot', color: 'text-violet-400' },
 ];
-// Hack for lucide icon
-const BrainCircuit = CloudCog;
 
 // GOVERNANCE
 const governanceItems = [
