@@ -23,23 +23,23 @@ import {
 } from 'lucide-react';
 ---
 
-<DashboardLayout title="Enterprise Integration Hub">
-  <div class="space-y-12">
+<DashboardLayout title="Enterprise Integration Hub" activeDept="Integrations">
+  <div class="space-y-12 font-sans">
     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10">
         <div>
             <div class="flex items-center gap-4 mb-4">
-               <div class="p-4 bg-violet-600 rounded-3xl text-white shadow-xl shadow-violet-600/20">
+               <div class="p-4 bg-primary rounded-3xl text-primary-foreground shadow-xl shadow-primary/20">
                   <Network size={32} />
                </div>
-               <h1 class="text-4xl font-black text-slate-900 uppercase tracking-tighter">Unified Integration Hub</h1>
+               <h1 class="text-4xl font-black text-foreground uppercase tracking-tighter">Unified Integration Hub</h1>
             </div>
-            <p class="text-slate-700 text-lg font-medium max-w-2xl">API-first architecture for orchestrating high-fidelity data exchange across SAP, Oracle, Salesforce, and modern communication suites.</p>
+            <p class="text-muted text-lg font-medium max-w-2xl">API-first architecture for orchestrating high-fidelity data exchange across SAP, Oracle, Salesforce, and modern communication suites.</p>
         </div>
         <div class="flex gap-4">
-            <button class="px-8 py-4 bg-white border border-slate-200 text-slate-600 rounded-[2rem] font-black uppercase tracking-widest text-[10px] shadow-sm flex items-center gap-3 transition-all hover:bg-white">
+            <button class="px-8 py-4 bg-surface border border-border text-foreground rounded-[2rem] font-black uppercase tracking-widest text-[10px] shadow-sm flex items-center gap-3 transition-all hover:bg-surface-elevated">
                 <RefreshCw size={14} /> Global Sync
             </button>
-            <button class="px-8 py-4 bg-violet-600 hover:bg-violet-500 text-white rounded-[2rem] font-black uppercase tracking-widest text-xs shadow-2xl shadow-violet-600/20 flex items-center gap-3 transition-all active:scale-95 group">
+            <button class="px-8 py-4 bg-primary hover:brightness-110 text-primary-foreground rounded-[2rem] font-black uppercase tracking-widest text-xs shadow-2xl shadow-primary/20 flex items-center gap-3 transition-all active:scale-95 group">
                 <Plus size={20} class="group-hover:rotate-90 transition-transform" /> 
                 New Connection
             </button>
@@ -49,26 +49,26 @@ import {
     {/* Integration Clusters */}
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
         {[
-            { name: 'SAP ERP Cluster', category: 'Finance / ERP', icon: Database, status: 'Online', latency: '4ms', color: 'text-violet-600', bg: 'bg-violet-50', border: 'border-violet-100' },
-            { name: 'Salesforce CRM', category: 'Customer Data', icon: Globe, status: 'Online', latency: '12ms', color: 'text-blue-600', bg: 'bg-blue-50', border: 'border-blue-100' },
-            { name: 'Oracle HCM', category: 'Human Capital', icon: Database, status: 'Degraded', latency: '412ms', color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-100' },
-            { name: 'Microsoft Dynamics', category: 'Operations', icon: Monitor, status: 'Online', latency: '8ms', color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-100' },
+            { name: 'SAP ERP Cluster', category: 'Finance / ERP', icon: Database, status: 'Online', latency: '4ms', color: 'text-primary', bg: 'bg-primary/10', border: 'border-primary/20' },
+            { name: 'Salesforce CRM', category: 'Customer Data', icon: Globe, status: 'Online', latency: '12ms', color: 'text-secondary', bg: 'bg-secondary/10', border: 'border-secondary/20' },
+            { name: 'Oracle HCM', category: 'Human Capital', icon: Database, status: 'Degraded', latency: '412ms', color: 'text-warning', bg: 'bg-warning/10', border: 'border-warning/20' },
+            { name: 'Microsoft Dynamics', category: 'Operations', icon: Monitor, status: 'Online', latency: '8ms', color: 'text-success', bg: 'bg-success/10', border: 'border-success/20' },
         ].map(conn => (
-            <div class="bg-white border border-slate-200 p-8 rounded-[2.5rem] space-y-6 group hover:border-violet-500/30 transition-all relative overflow-hidden shadow-sm hover:shadow-xl">
+            <div class="bg-surface border border-border p-8 rounded-[2.5rem] space-y-6 group hover:border-primary/50 transition-all relative overflow-hidden shadow-sm hover:shadow-xl">
                 <div class="flex justify-between items-start relative px-1">
-                    <div class={`p-4 rounded-2xl ${conn.bg} ${conn.color} border border-white shadow-sm group-hover:scale-110 transition-transform`}>
+                    <div class={`p-4 rounded-2xl ${conn.bg} ${conn.color} border ${conn.border} shadow-sm group-hover:scale-110 transition-transform`}>
                         <conn.icon size={28} />
                     </div>
-                    <div class={`px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest border ${conn.status === 'Online' ? 'text-emerald-600 bg-emerald-50 border-emerald-100' : 'text-amber-600 bg-amber-50 border-amber-100'} shadow-sm`}>
+                    <div class={`px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest border ${conn.status === 'Online' ? 'text-success bg-success/10 border-success/20' : 'text-warning bg-warning/10 border-warning/20'} shadow-sm`}>
                         {conn.status}
                     </div>
                 </div>
 
                 <div class="relative">
-                    <h3 class="text-xl font-black text-slate-900 uppercase tracking-tighter mb-1 mt-4">{conn.name}</h3>
-                    <p class="text-slate-600 text-[10px] font-black uppercase tracking-widest mb-6">{conn.category}</p>
+                    <h3 class="text-xl font-black text-foreground uppercase tracking-tighter mb-1 mt-4">{conn.name}</h3>
+                    <p class="text-muted text-[10px] font-black uppercase tracking-widest mb-6">{conn.category}</p>
                     
-                    <div class="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-600 border-t border-slate-50 pt-4">
+                    <div class="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-muted border-t border-border pt-4">
                        <span class="tracking-tight font-medium">Real-time Latency</span>
                        <span class={`${conn.color} font-black`}>{conn.latency}</span>
                     </div>
@@ -79,17 +79,17 @@ import {
 
     {/* Webhook & API Infrastructure */}
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-10">
-        <div class="xl:col-span-2 bg-white border border-slate-200 rounded-[3rem] overflow-hidden shadow-sm">
-            <div class="p-10 border-b border-slate-100 flex justify-between items-center bg-white/50">
+        <div class="xl:col-span-2 bg-surface border border-border rounded-[3rem] overflow-hidden shadow-sm">
+            <div class="p-10 border-b border-border flex justify-between items-center bg-surface-elevated">
                 <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center text-slate-900 shadow-lg shadow-amber-500/20">
+                    <div class="w-10 h-10 rounded-xl bg-warning/20 flex items-center justify-center text-warning shadow-lg shadow-warning/10 border border-warning/30">
                        <Zap size={20} />
                     </div>
-                    <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tighter">Live Webhook Stream</h2>
+                    <h2 class="text-2xl font-black text-foreground uppercase tracking-tighter">Live Webhook Stream</h2>
                 </div>
                 <div class="flex gap-2">
                    {['All Nodes', 'Security Only', 'Finance Cluster'].map(v => (
-                       <button class="px-4 py-1.5 bg-white text-slate-600 text-[9px] font-black uppercase tracking-widest rounded-lg border border-slate-200 hover:text-slate-900 hover:bg-white transition-all transition-all">{v}</button>
+                       <button class="px-4 py-1.5 bg-surface-elevated text-muted text-[9px] font-black uppercase tracking-widest rounded-lg border border-border hover:text-foreground hover:bg-border transition-all">{v}</button>
                    ))}
                 </div>
             </div>
@@ -101,17 +101,17 @@ import {
                     { event: 'DocuSign_Signature_Reception', payload: 'ENV_ID: 4122-A | USER: P. Kumar', time: '4s ago', status: '200 OK' },
                     { event: 'WhatsApp_Alert_Dispatched', payload: 'RECIPIENT: +91-98XXX | TYPE: SLA_Alert', time: '12s ago', status: '200 OK' },
                 ].map(log => (
-                    <div class="px-8 py-6 hover:bg-white transition-all cursor-pointer group flex items-center gap-10 rounded-2xl">
+                    <div class="px-8 py-6 hover:bg-surface-elevated transition-all cursor-pointer group flex items-center gap-10 rounded-2xl">
                          <div class="flex-1">
                             <div class="flex items-center gap-4 mb-2">
-                               <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></div>
-                               <h4 class="text-sm font-black text-slate-900 tracking-tight uppercase group-hover:text-violet-600 transition-colors">{log.event}</h4>
+                               <div class="w-2 h-2 rounded-full bg-success shadow-[0_0_8px_#10b981]"></div>
+                               <h4 class="text-sm font-black text-foreground tracking-tight uppercase group-hover:text-primary transition-colors">{log.event}</h4>
                             </div>
-                            <p class="text-[10px] text-slate-600 font-black uppercase tracking-widest leading-none truncate max-w-sm">{log.payload}</p>
+                            <p class="text-[10px] text-muted font-black uppercase tracking-widest leading-none truncate max-w-sm">{log.payload}</p>
                          </div>
                          <div class="text-right shrink-0">
-                            <p class="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-1 leading-none">{log.time}</p>
-                            <span class="text-[9px] font-black text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-100 shadow-sm">{log.status}</span>
+                            <p class="text-[10px] font-black text-muted uppercase tracking-widest mb-1 leading-none">{log.time}</p>
+                            <span class="text-[9px] font-black text-success bg-success/10 px-3 py-1.5 rounded-xl border border-success/20 shadow-sm">{log.status}</span>
                          </div>
                     </div>
                 ))}
@@ -120,9 +120,9 @@ import {
 
         {/* Security & Token Management */}
         <div class="space-y-8">
-            <div class="bg-white border border-slate-200 p-10 rounded-[3rem] space-y-8 shadow-sm">
-                <h3 class="text-xl font-black text-slate-900 uppercase tracking-tighter flex items-center gap-4">
-                   <div class="p-2.5 rounded-xl bg-white text-slate-900">
+            <div class="bg-surface border border-border p-10 rounded-[3rem] space-y-8 shadow-sm">
+                <h3 class="text-xl font-black text-foreground uppercase tracking-tighter flex items-center gap-4">
+                   <div class="p-2.5 rounded-xl bg-surface-elevated text-foreground border border-border">
                       <Lock size={18} />
                    </div>
                    Credential Vault
@@ -133,25 +133,25 @@ import {
                       { name: 'ZOHO_CRM_CLIENT_ID', modified: '1d ago', level: 'Med' },
                       { name: 'SLACK_OAUTH_TOKEN', modified: '14m ago', level: 'High' },
                    ].map(cred => (
-                      <div class="p-5 bg-white border border-slate-100 rounded-2xl flex justify-between items-center group hover:border-violet-500/30 transition-all cursor-pointer">
+                      <div class="p-5 bg-surface-elevated border border-border rounded-2xl flex justify-between items-center group hover:border-primary/50 transition-all cursor-pointer">
                          <div>
-                            <p class="text-xs font-black text-slate-900 tracking-tight uppercase">{cred.name}</p>
-                            <p class="text-[9px] text-slate-600 uppercase font-black tracking-widest mt-1">Encrypted: AES-256</p>
+                            <p class="text-xs font-black text-foreground tracking-tight uppercase">{cred.name}</p>
+                            <p class="text-[9px] text-muted uppercase font-black tracking-widest mt-1">Encrypted: AES-256</p>
                          </div>
-                         <div class={`px-3 py-1.5 rounded-xl text-[8px] font-black uppercase tracking-widest border ${cred.level === 'High' ? 'text-rose-600 bg-rose-50 border-rose-100' : 'text-amber-600 bg-amber-50 border-amber-100'} shadow-sm`}>
+                         <div class={`px-3 py-1.5 rounded-xl text-[8px] font-black uppercase tracking-widest border ${cred.level === 'High' ? 'text-critical bg-critical/10 border-critical/20' : 'text-warning bg-warning/10 border-warning/20'} shadow-sm`}>
                             {cred.level}
                           </div>
                       </div>
                    ))}
                 </div>
-                <button class="w-full py-4 bg-white hover:bg-black text-white rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-xl shadow-slate-900/10 transition-all active:scale-95">Rotate All API Keys</button>
+                <button class="w-full py-4 bg-surface-elevated hover:bg-border text-foreground rounded-2xl font-black uppercase tracking-widest text-[10px] shadow-sm transition-all active:scale-95 border border-border">Rotate All API Keys</button>
             </div>
 
-            <div class="bg-violet-600 p-10 rounded-[3rem] space-y-8 shadow-2xl shadow-violet-600/30 relative overflow-hidden group">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform"></div>
+            <div class="bg-primary/5 p-10 rounded-[3rem] space-y-8 shadow-xl relative overflow-hidden group border-2 border-primary/20">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform pointer-events-none"></div>
                 <div class="flex items-center gap-4 relative z-10">
-                   <Cpu size={24} class="text-slate-900" />
-                   <h3 class="text-sm font-black text-slate-900 uppercase tracking-widest">Neural Infrastructure</h3>
+                   <Cpu size={24} class="text-primary" />
+                   <h3 class="text-sm font-black text-foreground uppercase tracking-widest">Neural Infrastructure</h3>
                 </div>
                 <div class="space-y-6 relative z-10">
                    {[
@@ -162,11 +162,11 @@ import {
                    ].map(stat => (
                       <div class="space-y-2">
                          <div class="flex justify-between items-end">
-                            <span class="text-[9px] font-black text-slate-900/60 uppercase tracking-widest">{stat.label}</span>
-                            <span class="text-[10px] font-black text-slate-900">{stat.val}%</span>
+                            <span class="text-[9px] font-black text-muted uppercase tracking-widest">{stat.label}</span>
+                            <span class="text-[10px] font-black text-foreground">{stat.val}%</span>
                          </div>
-                         <div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                            <div class="h-full bg-white shadow-[0_0_10px_#fff]" style={{ width: `${stat.val}%` }}></div>
+                         <div class="h-1.5 w-full bg-surface-elevated rounded-full overflow-hidden border border-border">
+                            <div class="h-full bg-primary shadow-[0_0_10px_rgba(124,58,237,0.5)]" style={{ width: `${stat.val}%` }}></div>
                          </div>
                       </div>
                    ))}
@@ -176,18 +176,12 @@ import {
     </div>
 
     {/* Custom 3rd-Party Integrations App Marketplace */}
-    <div class="pt-12 mt-12 border-t border-slate-200">
+    <div class="pt-12 mt-12 border-t border-border">
         <div class="mb-8">
-            <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tighter">Third-Party Marketplace</h2>
-            <p class="text-slate-600 font-medium">Connect external tools like Slack, Jira, and GitHub seamlessly.</p>
+            <h2 class="text-2xl font-black text-foreground uppercase tracking-tighter">Third-Party Marketplace</h2>
+            <p class="text-muted font-medium">Connect external tools like Slack, Jira, and GitHub seamlessly.</p>
         </div>
         <IntegrationsHub client:load />
     </div>
   </div>
 </DashboardLayout>
-
-
-
-
-
-
