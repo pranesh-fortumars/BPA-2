@@ -25,10 +25,10 @@ export const GlassCard: React.FC<GlassCardProps> = ({
   const baseStyles = "relative overflow-hidden rounded-2xl border backdrop-blur-md transition-all duration-300";
   
   const variants = {
-    light: "bg-white border-slate-100 shadow-xl shadow-slate-200/20",
-    dark: "bg-white border-slate-100 shadow-2xl shadow-violet-600/5",
-    accent: "bg-violet-50 border-violet-100 shadow-xl shadow-violet-600/5",
-    transparent: "bg-white/40 border-white/20"
+    light: "bg-surface border-border shadow-sm",
+    dark: "bg-surface border-border shadow-lg",
+    accent: "bg-primary/5 border-primary/20 shadow-md",
+    transparent: "bg-background/40 border-border/20"
   };
 
   const hoverStyles = hoverEffect ? "hover:translate-y-[-4px] hover:shadow-2xl hover:shadow-violet-600/10" : "";

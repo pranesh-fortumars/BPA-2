@@ -1,13 +1,13 @@
 ---
 import DashboardLayout from '../../layouts/DashboardLayout.astro';
-import { ProcessAnalytics } from '../../components/intelligence/ProcessAnalytics';
+import { ProcessIntelligence } from '../../components/ProcessIntelligence';
 ---
 
-<DashboardLayout title="Process Intelligence | BPA PRO">
+<DashboardLayout title="Process Intelligence" activeDept="Analytics">
   <div class="mb-8">
-    <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-2">Process <span class="text-violet-500">Intelligence</span></h1>
-    <p class="text-slate-500 font-medium">Deep-dive analytics, departmental health, and automation savings.</p>
+    <h1 class="text-3xl font-black text-foreground tracking-tight mb-2">Process <span class="text-primary">Intelligence</span></h1>
+    <p class="text-muted font-medium">Deep-dive analytics, departmental health, and automation savings.</p>
   </div>
   
-  <ProcessAnalytics client:load />
+  <ProcessIntelligence client:load />
 </DashboardLayout>

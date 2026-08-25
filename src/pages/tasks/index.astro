@@ -1,12 +1,16 @@
 ---
 import DashboardLayout from '../../layouts/DashboardLayout.astro';
-import { TasksView } from '../../components/TasksView';
+import { ApprovalInbox } from '../../components/operations/ApprovalInbox';
 ---
 
-<DashboardLayout title="Operational Task Grid">
-  <!-- Dynamic Task View Island -->
-  <div class="relative min-h-screen">
-    <TasksView client:load />
+<DashboardLayout title="Human Tasks & Approvals" activeDept="Operations">
+  <div class="mb-8">
+    <h1 class="text-3xl font-black text-foreground tracking-tight mb-2">Human <span class="text-primary">Tasks & Approvals</span></h1>
+    <p class="text-muted font-medium">Centralized inbox for manual interventions, approvals, and escalations.</p>
+  </div>
+  
+  <div class="relative min-h-screen font-sans">
+    <ApprovalInbox client:load />
   </div>
 </DashboardLayout>
 

@@ -1,0 +1,13 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { ProcessInstancesTable } from '../../components/operations/ProcessInstancesTable';
+---
+
+<DashboardLayout title="Process Instances" activeDept="Operations">
+  <div class="mb-8">
+    <h1 class="text-3xl font-black text-foreground tracking-tight mb-2">Process <span class="text-primary">Instances</span></h1>
+    <p class="text-muted font-medium">Real-time monitoring and control of active workflow executions.</p>
+  </div>
+  
+  <ProcessInstancesTable client:load />
+</DashboardLayout>
