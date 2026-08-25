@@ -3,10 +3,10 @@ import DashboardLayout from '../../layouts/DashboardLayout.astro';
 import { SystemSettings } from '../../components/admin/SystemSettings';
 ---
 
-<DashboardLayout title="System Settings | BPA PRO">
-  <div class="mb-8">
-    <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-2">System <span class="text-slate-400">Settings</span></h1>
-    <p class="text-slate-500 font-medium">Configure global workspace preferences, white-labeling, and security.</p>
+<DashboardLayout title="System Settings | BPA PRO" activeDept="Settings">
+  <div class="mb-8 font-sans">
+    <h1 class="text-3xl font-black text-foreground tracking-tight mb-2">System <span class="text-primary">Settings</span></h1>
+    <p class="text-muted font-medium">Configure global workspace preferences, white-labeling, and security.</p>
   </div>
   
   <SystemSettings client:load />
