@@ -17,19 +17,19 @@ import {
 } from 'lucide-react';
 ---
 
-<DashboardLayout title="Neural Document Extraction">
-  <div class="space-y-12">
+<DashboardLayout title="Neural Document Extraction" activeDept="Automation">
+  <div class="space-y-12 font-sans">
     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10">
         <div>
             <div class="flex items-center gap-3 mb-4">
-               <div class="p-3 bg-purple-600/10 border border-purple-500/20 rounded-2xl text-violet-600">
+               <div class="p-3 bg-primary/10 border border-primary/20 rounded-2xl text-primary">
                   <FileText size={32} />
                </div>
-               <h1 class="text-4xl font-black text-slate-900 uppercase tracking-tighter">Smart Document Automation</h1>
+               <h1 class="text-4xl font-black text-foreground uppercase tracking-tighter">Smart Document Automation</h1>
             </div>
-            <p class="text-slate-700 text-lg font-medium max-w-2xl">Autonomous OCR processing, neural-field mapping, and automated validation for enterprise-grade document ingestion.</p>
+            <p class="text-muted text-lg font-medium max-w-2xl">Autonomous OCR processing, neural-field mapping, and automated validation for enterprise-grade document ingestion.</p>
         </div>
-        <button class="px-8 py-4 bg-purple-600 hover:bg-purple-500 text-white rounded-[2rem] font-black uppercase tracking-widest text-xs shadow-2xl flex items-center gap-3 transition-all active:scale-95 group">
+        <button class="px-8 py-4 bg-primary hover:brightness-110 text-primary-foreground rounded-[2rem] font-black uppercase tracking-widest text-xs shadow-2xl flex items-center gap-3 transition-all active:scale-95 group">
             <Upload size={20} class="group-hover:-translate-y-1 transition-transform" /> 
             Upload Target Document
         </button>
@@ -38,60 +38,60 @@ import {
     <div class="grid grid-cols-1 xl:grid-cols-3 gap-10">
         {/* Document Ingestion Stream */}
         <div class="xl:col-span-2 space-y-8">
-            <div class="bg-white/50 border border-slate-100 rounded-[3rem] overflow-hidden shadow-2xl">
-                 <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-white/20">
+            <div class="bg-surface border border-border rounded-[3rem] overflow-hidden shadow-sm">
+                 <div class="p-8 border-b border-border flex justify-between items-center bg-surface-elevated">
                     <div class="flex items-center gap-4">
-                       <Database className="text-slate-700" />
-                       <h2 class="text-xl font-black text-slate-900 uppercase tracking-tighter">Ingestion Queue</h2>
+                       <Database className="text-muted" />
+                       <h2 class="text-xl font-black text-foreground uppercase tracking-tighter">Ingestion Queue</h2>
                     </div>
                     <div class="flex gap-2">
                        {['In-Review', 'Validated', 'Automated'].map(f => (
-                          <span class="px-4 py-1.5 bg-white text-slate-600 text-[9px] font-black uppercase tracking-widest rounded-lg border border-slate-100">{f}</span>
+                          <span class="px-4 py-1.5 bg-surface-elevated text-muted text-[9px] font-black uppercase tracking-widest rounded-lg border border-border">{f}</span>
                        ))}
                     </div>
                  </div>
                  <div class="p-4 overflow-x-auto">
                     <table class="w-full text-left">
                         <thead>
-                            <tr class="text-[10px] font-black text-slate-700 uppercase tracking-widest border-b border-white/5">
+                            <tr class="text-[10px] font-black text-muted uppercase tracking-widest border-b border-border">
                                 <th class="px-6 py-4">Document Identity</th>
                                 <th class="px-6 py-4">Neural Confidence</th>
                                 <th class="px-6 py-4">Extraction State</th>
                                 <th class="px-6 py-4 text-right">Core Mapping</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-white/5">
+                        <tbody class="divide-y divide-border">
                             {[
                                 { name: 'Vendor_Invoice_Q4_2026.pdf', size: '2.4 MB', conf: 99.8, state: 'Automated', type: 'Invoice' },
                                 { name: 'Employee_Onboarding_SLA.docx', size: '1.1 MB', conf: 96.2, state: 'In-Review', type: 'Contract' },
                                 { name: 'Finance_Audit_Alpha_Rpt.pdf', size: '12.8 MB', conf: 99.1, state: 'Validated', type: 'Audit' },
                                 { name: 'PO_Requisition_312.pdf', size: '412 KB', conf: 94.4, state: 'Automated', type: 'Purchase Order' },
                             ].map(doc => (
-                                <tr class="hover:bg-white/30 transition-all cursor-pointer group">
+                                <tr class="hover:bg-surface-elevated transition-all cursor-pointer group">
                                     <td class="px-6 py-8">
                                        <div class="flex items-center gap-4">
-                                          <div class="w-12 h-12 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-600 group-hover:text-violet-600 transition-colors">
+                                          <div class="w-12 h-12 rounded-xl bg-surface border border-border flex items-center justify-center text-muted group-hover:text-primary group-hover:border-primary/30 transition-colors">
                                              <FileText size={20} />
                                           </div>
                                           <div>
-                                             <p class="text-sm font-black text-slate-900 uppercase tracking-tight group-hover:text-violet-600 transition-colors">{doc.name}</p>
-                                             <p class="text-[10px] text-slate-600 font-bold">{doc.size} • {doc.type}</p>
+                                             <p class="text-sm font-black text-foreground uppercase tracking-tight group-hover:text-primary transition-colors">{doc.name}</p>
+                                             <p class="text-[10px] text-muted font-bold">{doc.size} • {doc.type}</p>
                                           </div>
                                        </div>
                                     </td>
                                     <td class="px-6 py-8">
                                        <div class="flex items-center gap-4">
-                                          <div class="w-24 h-2 bg-white rounded-full overflow-hidden shrink-0 border border-white/5">
-                                             <div class={`h-full ${doc.conf > 98 ? 'bg-emerald-500' : 'bg-purple-500'}`} style={{ width: `${doc.conf}%` }}></div>
+                                          <div class="w-24 h-2 bg-surface-elevated rounded-full overflow-hidden shrink-0 border border-border">
+                                             <div class={`h-full ${doc.conf > 98 ? 'bg-success shadow-[0_0_10px_#10b981]' : 'bg-primary'}`} style={{ width: `${doc.conf}%` }}></div>
                                           </div>
-                                          <span class="text-sm font-black text-slate-900 italic">{doc.conf}%</span>
+                                          <span class="text-sm font-black text-foreground italic">{doc.conf}%</span>
                                        </div>
                                     </td>
                                     <td class="px-6 py-8">
-                                       <span class={`px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest border border-slate-100/50 ${doc.state === 'Automated' ? 'text-emerald-600 bg-emerald-500/5' : 'text-amber-600 bg-amber-500/5'}`}>{doc.state}</span>
+                                       <span class={`px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest border ${doc.state === 'Automated' ? 'text-success bg-success/10 border-success/20' : 'text-warning bg-warning/10 border-warning/20'}`}>{doc.state}</span>
                                     </td>
                                     <td class="px-6 py-8 text-right">
-                                       <button class="p-2.5 bg-white text-slate-600 rounded-xl hover:text-slate-900 transition-all"><ArrowUpRight size={18} /></button>
+                                       <button class="p-2.5 bg-surface-elevated text-muted rounded-xl hover:text-foreground hover:bg-border transition-all"><ArrowUpRight size={18} /></button>
                                     </td>
                                 </tr>
                             ))}
@@ -101,12 +101,12 @@ import {
             </div>
 
             {/* Neural Extraction Insight */}
-            <div class="p-10 bg-purple-600/5 border-2 border-purple-500/20 rounded-[3rem] relative overflow-hidden group">
-               <div class="absolute -right-24 -top-24 w-96 h-96 bg-purple-500/10 rounded-full blur-[80px] group-hover:scale-110 transition-transform"></div>
+            <div class="p-10 bg-primary/5 border-2 border-primary/20 rounded-[3rem] relative overflow-hidden group">
+               <div class="absolute -right-24 -top-24 w-96 h-96 bg-primary/10 rounded-full blur-[80px] group-hover:scale-110 transition-transform pointer-events-none"></div>
                <div class="relative z-10 space-y-6">
                   <div class="flex items-center gap-4">
-                     <Sparkles className="text-violet-600 animate-pulse" size={32} />
-                     <h3 class="text-2xl font-black text-slate-900 uppercase tracking-tighter">AI Extraction Mockup: Invoice_912</h3>
+                     <Sparkles className="text-primary animate-pulse" size={32} />
+                     <h3 class="text-2xl font-black text-foreground uppercase tracking-tighter">AI Extraction Mockup: Invoice_912</h3>
                   </div>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
                      <div class="space-y-4">
@@ -116,25 +116,25 @@ import {
                            { field: 'Due Date', value: '2026-04-18', conf: 100 },
                            { field: 'Tax ID (GST)', value: 'GST-9412-X', conf: 98.4 },
                         ].map(f => (
-                           <div class="p-4 bg-white h-20 border border-slate-100 rounded-2xl flex justify-between items-center group-hover:border-purple-500/30 transition-all">
+                           <div class="p-4 bg-surface h-20 border border-border rounded-2xl flex justify-between items-center hover:border-primary/30 transition-all">
                               <div>
-                                 <p class="text-[9px] font-black text-slate-700 uppercase tracking-widest leading-none mb-1">{f.field}</p>
-                                 <p class="text-sm font-black text-slate-900">{f.value}</p>
+                                 <p class="text-[9px] font-black text-muted uppercase tracking-widest leading-none mb-1">{f.field}</p>
+                                 <p class="text-sm font-black text-foreground">{f.value}</p>
                               </div>
                               <div class="text-right">
-                                 <p class="text-[10px] font-black text-emerald-600">{f.conf}%</p>
+                                 <p class="text-[10px] font-black text-success">{f.conf}%</p>
                               </div>
                            </div>
                         ))}
                      </div>
-                     <div class="h-full bg-white border border-slate-100 rounded-[2rem] p-8 flex flex-col justify-center gap-6">
-                        <div class="w-full h-2 bg-white rounded-full overflow-hidden">
-                           <div class="h-full w-full bg-violet-600 shadow-[0_0_15px_#6366f1]"></div>
+                     <div class="h-full bg-surface border border-border rounded-[2rem] p-8 flex flex-col justify-center gap-6">
+                        <div class="w-full h-2 bg-surface-elevated rounded-full overflow-hidden">
+                           <div class="h-full w-full bg-primary shadow-[0_0_15px_rgba(124,58,237,0.5)]"></div>
                         </div>
-                        <p class="text-xs text-slate-700 font-medium leading-relaxed">System has automatically mapped <span class="text-violet-600 font-black">4 core fields</span> and verified against ERP purchase orders. Proceed with automated routing to Finance Approval Board?</p>
+                        <p class="text-xs text-muted font-medium leading-relaxed">System has automatically mapped <span class="text-primary font-black">4 core fields</span> and verified against ERP purchase orders. Proceed with automated routing to Finance Approval Board?</p>
                         <div class="flex gap-2">
-                           <button class="px-6 py-2.5 bg-white rounded-xl text-[10px] font-black text-slate-900 uppercase tracking-widest hover:bg-slate-700 transition-all">Inspect OCR</button>
-                           <button class="px-6 py-2.5 bg-purple-600 rounded-xl text-[10px] font-black text-white uppercase tracking-widest hover:bg-purple-500 transition-all shadow-xl shadow-purple-600/20">Route Automaticaly</button>
+                           <button class="px-6 py-2.5 bg-surface-elevated border border-border rounded-xl text-[10px] font-black text-foreground uppercase tracking-widest hover:bg-border transition-all">Inspect OCR</button>
+                           <button class="px-6 py-2.5 bg-primary rounded-xl text-[10px] font-black text-primary-foreground uppercase tracking-widest hover:brightness-110 transition-all shadow-xl shadow-primary/20">Route Automaticaly</button>
                         </div>
                      </div>
                   </div>
@@ -144,9 +144,9 @@ import {
 
         {/* Feature Sidebar */}
         <div class="space-y-8">
-            <div class="bg-white/50 border border-slate-100 p-8 rounded-[3rem] space-y-8">
-                <h3 class="text-lg font-black text-slate-900 uppercase tracking-tighter flex items-center gap-3">
-                   <ShieldCheck className="text-emerald-500" />
+            <div class="bg-surface border border-border p-8 rounded-[3rem] space-y-8">
+                <h3 class="text-lg font-black text-foreground uppercase tracking-tighter flex items-center gap-3">
+                   <ShieldCheck className="text-success" />
                    Automation Purity
                 </h3>
                 <div class="space-y-6">
@@ -158,47 +158,42 @@ import {
                    ].map(item => (
                       <div class="space-y-2">
                          <div class="flex justify-between items-end">
-                            <span class="text-[10px] font-black text-slate-700 uppercase tracking-widest">{item.label}</span>
-                            <span class="text-xs font-black text-slate-900 italic">{item.status}</span>
+                            <span class="text-[10px] font-black text-muted uppercase tracking-widest">{item.label}</span>
+                            <span class="text-xs font-black text-foreground italic">{item.status}</span>
                          </div>
-                         <div class="h-1 w-full bg-white rounded-full overflow-hidden">
-                            <div class="h-full bg-emerald-500" style={{ width: `${item.val}%` }}></div>
+                         <div class="h-1 w-full bg-surface-elevated rounded-full overflow-hidden">
+                            <div class="h-full bg-success shadow-[0_0_10px_#10b981]" style={{ width: `${item.val}%` }}></div>
                          </div>
                       </div>
                    ))}
                 </div>
             </div>
 
-            <div class="bg-violet-600/5 border border-violet-500/20 p-8 rounded-[3rem] space-y-6">
+            <div class="bg-primary/5 border border-primary/20 p-8 rounded-[3rem] space-y-6">
                 <div class="flex items-center gap-4">
-                   <Zap className="text-violet-400" size={24} />
-                   <h3 class="text-md font-black text-slate-900 uppercase tracking-tight">Cycle Speed Improvement</h3>
+                   <Zap className="text-primary" size={24} />
+                   <h3 class="text-md font-black text-foreground uppercase tracking-tight">Cycle Speed Improvement</h3>
                 </div>
-                <p class="text-xs text-slate-700 font-medium leading-relaxed">Corporate ingestion cycle time has been reduced by <span class="text-emerald-600 font-black">94.2%</span> through autonomous document processing and neural OCR mapping.</p>
-                <div class="p-4 bg-white border border-violet-500/10 rounded-2xl flex items-center justify-between">
-                   <span class="text-[10px] font-black text-slate-600 uppercase">Legacy Time</span>
-                   <span class="text-sm font-black text-slate-700 line-through">14.2 min</span>
+                <p class="text-xs text-muted font-medium leading-relaxed">Corporate ingestion cycle time has been reduced by <span class="text-success font-black">94.2%</span> through autonomous document processing and neural OCR mapping.</p>
+                <div class="p-4 bg-surface border border-border rounded-2xl flex items-center justify-between">
+                   <span class="text-[10px] font-black text-muted uppercase">Legacy Time</span>
+                   <span class="text-sm font-black text-muted line-through">14.2 min</span>
                 </div>
-                <div class="p-4 bg-violet-600/20 border border-violet-500/30 rounded-2xl flex items-center justify-between shadow-xl shadow-violet-600/10">
-                   <span class="text-[10px] font-black text-violet-400 uppercase">Neural Time</span>
-                   <span class="text-sm font-black text-slate-900">412 ms</span>
+                <div class="p-4 bg-primary/10 border border-primary/20 rounded-2xl flex items-center justify-between shadow-xl shadow-primary/10">
+                   <span class="text-[10px] font-black text-primary uppercase">Neural Time</span>
+                   <span class="text-sm font-black text-foreground">412 ms</span>
                 </div>
             </div>
         </div>
     </div>
 
     {/* Knowledge Hub Integration */}
-    <div class="pt-12 mt-12 border-t border-slate-200">
+    <div class="pt-12 mt-12 border-t border-border">
         <div class="mb-8">
-            <h2 class="text-2xl font-black text-slate-900 uppercase tracking-tighter">Enterprise Knowledge Base</h2>
-            <p class="text-slate-600 font-medium">Semantic Search, Wikis, and Standard Operating Procedures</p>
+            <h2 class="text-2xl font-black text-foreground uppercase tracking-tighter">Enterprise Knowledge Base</h2>
+            <p class="text-muted font-medium">Semantic Search, Wikis, and Standard Operating Procedures</p>
         </div>
         <KnowledgeHub client:load />
     </div>
   </div>
 </DashboardLayout>
-
-
-
-
-

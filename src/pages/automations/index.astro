@@ -1,0 +1,13 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { AutomationsHub } from '../../components/operations/AutomationsHub';
+---
+
+<DashboardLayout title="Automations Hub" activeDept="Automation">
+  <div class="mb-8">
+    <h1 class="text-3xl font-black text-foreground tracking-tight mb-2">Automations <span class="text-primary">Hub</span></h1>
+    <p class="text-muted font-medium">Central command for all deployed and active automation processes.</p>
+  </div>
+  
+  <AutomationsHub client:load />
+</DashboardLayout>

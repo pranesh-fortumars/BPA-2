@@ -1,0 +1,13 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { RPADashboard } from '../../components/operations/RPADashboard';
+---
+
+<DashboardLayout title="RPA Workforce" activeDept="Automation">
+  <div class="mb-8">
+    <h1 class="text-3xl font-black text-foreground tracking-tight mb-2">RPA <span class="text-primary">Workforce</span></h1>
+    <p class="text-muted font-medium">Manage and monitor your Robotic Process Automation bot army and server clusters.</p>
+  </div>
+  
+  <RPADashboard client:load />
+</DashboardLayout>

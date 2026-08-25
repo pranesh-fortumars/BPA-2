@@ -3,10 +3,10 @@ import DashboardLayout from '../../layouts/DashboardLayout.astro';
 import { AgentFleetManager } from '../../components/intelligence/AgentFleetManager';
 ---
 
-<DashboardLayout title="AI Agent Fleets | BPA PRO">
+<DashboardLayout title="AI Agent Fleets" activeDept="Automation">
   <div class="mb-8">
-    <h1 class="text-3xl font-black text-slate-900 tracking-tight mb-2">AI Agent <span class="text-emerald-500">Fleets</span></h1>
-    <p class="text-slate-500 font-medium">Orchestrate and monitor autonomous background intelligence workers.</p>
+    <h1 class="text-3xl font-black text-foreground tracking-tight mb-2">AI Agent <span class="text-primary">Fleets</span></h1>
+    <p class="text-muted font-medium">Orchestrate and monitor autonomous background intelligence workers.</p>
   </div>
   
   <AgentFleetManager client:load />
