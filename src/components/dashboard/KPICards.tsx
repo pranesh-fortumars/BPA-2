@@ -16,7 +16,8 @@ export const KPICards: React.FC<KPICardsProps> = ({ stats }) => {
             trendDesc: 'vs yesterday',
             trendColor: 'text-success',
             icon: <PlaySquare size={20} className="text-secondary" />,
-            bg: 'bg-secondary/10'
+            bg: 'bg-secondary/10',
+            path: '/instances'
         },
         {
             title: 'Completed (Today)',
@@ -25,7 +26,8 @@ export const KPICards: React.FC<KPICardsProps> = ({ stats }) => {
             trendDesc: 'vs yesterday',
             trendColor: 'text-success',
             icon: <CheckCircle2 size={20} className="text-success" />,
-            bg: 'bg-success/10'
+            bg: 'bg-success/10',
+            path: '/instances'
         },
         {
             title: 'At Risk',
@@ -34,7 +36,8 @@ export const KPICards: React.FC<KPICardsProps> = ({ stats }) => {
             trendDesc: 'Require attention',
             trendColor: 'text-warning',
             icon: <AlertTriangle size={20} className="text-warning" />,
-            bg: 'bg-warning/10'
+            bg: 'bg-warning/10',
+            path: '/analytics'
         },
         {
             title: 'Failed',
@@ -43,7 +46,8 @@ export const KPICards: React.FC<KPICardsProps> = ({ stats }) => {
             trendDesc: 'vs yesterday',
             trendColor: 'text-critical',
             icon: <XCircle size={20} className="text-critical" />,
-            bg: 'bg-critical/10'
+            bg: 'bg-critical/10',
+            path: '/analytics'
         },
         {
             title: 'Automation Value (MTD)',
@@ -52,7 +56,8 @@ export const KPICards: React.FC<KPICardsProps> = ({ stats }) => {
             trendDesc: 'vs last month',
             trendColor: 'text-success',
             icon: <Zap size={20} className="text-primary" />,
-            bg: 'bg-primary/10'
+            bg: 'bg-primary/10',
+            path: '/roi'
         },
         {
             title: 'SLA Compliance',
@@ -61,14 +66,15 @@ export const KPICards: React.FC<KPICardsProps> = ({ stats }) => {
             trendDesc: 'vs last month',
             trendColor: 'text-success',
             icon: <ShieldCheck size={20} className="text-success" />,
-            bg: 'bg-success/10'
+            bg: 'bg-success/10',
+            path: '/analytics'
         }
     ];
 
     return (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {cards.map((card, i) => (
-                <div key={i} className="bg-surface border border-border rounded-xl p-4 hover:border-primary/30 transition-colors shadow-sm cursor-pointer group">
+                <a href={card.path || '#'} key={i} className="bg-surface border border-border rounded-xl p-4 hover:border-primary/30 transition-colors shadow-sm cursor-pointer group block">
                     <div className="flex items-center gap-3 mb-3">
                         <div className={`w-8 h-8 rounded-lg ${card.bg} flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
                             {card.icon}
@@ -80,7 +86,7 @@ export const KPICards: React.FC<KPICardsProps> = ({ stats }) => {
                         <span className={`${card.trendColor} font-bold`}>{card.trend}</span>
                         <span className="text-muted">{card.trendDesc}</span>
                     </div>
-                </div>
+                </a>
             ))}
         </div>
     );

@@ -5,12 +5,36 @@ import { DataService } from '../../lib/db';
 
 export const CommandCenterCharts = () => {
     const [throughput, setThroughput] = useState<any[]>([]);
+    const [activeTab, setActiveTab] = useState('24H');
 
     useEffect(() => {
-        DataService.get<any>('kpi_data', 'throughput-24h').then(doc => {
-            if (doc && doc.data) setThroughput(doc.data);
+        DataService.get<any>('kpi_data', `throughput-${activeTab.toLowerCase()}`).then(doc => {
+            if (doc && doc.data) {
+                setThroughput(doc.data);
+            } else {
+                const data = generateMockData(activeTab);
+                DataService.save('kpi_data', { id: `throughput-${activeTab.toLowerCase()}`, data });
+                setThroughput(data);
+            }
         });
-    }, []);
+    }, [activeTab]);
+
+    const generateMockData = (period: string) => {
+        const data = [];
+        const count = period === '24H' ? 7 : period === '7D' ? 7 : 30;
+        const labels = period === '24H' ? ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '23:59'] : 
+                       period === '7D' ? ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] :
+                       Array.from({length: 30}, (_, i) => `Day ${i+1}`);
+                       
+        for(let i=0; i<count; i++) {
+            data.push({
+                time: labels[i],
+                started: Math.floor(Math.random() * 500) + 200,
+                completed: Math.floor(Math.random() * 400) + 100
+            });
+        }
+        return data;
+    };
 
     const donutData = [
         { name: 'API Workflows', value: 42, color: '#8b5cf6' },
@@ -31,7 +55,11 @@ export const CommandCenterCharts = () => {
                     </div>
                     <div className="flex gap-1">
                         {['24H', '7D', '30D'].map(t => (
-                            <button key={t} className={`px-2 py-0.5 text-[10px] font-bold rounded ${t === '24H' ? 'bg-primary text-white' : 'text-muted hover:text-foreground'}`}>
+                            <button 
+                                key={t} 
+                                onClick={() => setActiveTab(t)}
+                                className={`px-2 py-0.5 text-[10px] font-bold rounded ${t === activeTab ? 'bg-primary text-primary-foreground' : 'text-muted hover:text-foreground'}`}
+                            >
                                 {t}
                             </button>
                         ))}

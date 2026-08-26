@@ -47,7 +47,7 @@ export const ProcessHealthTable = () => {
                     </thead>
                     <tbody className="divide-y divide-border">
                         {processes.map(proc => (
-                            <tr key={proc.id} className="group hover:bg-surface-elevated transition-colors cursor-pointer">
+                            <tr key={proc.id} onClick={() => window.location.href = '/analytics'} className="group hover:bg-surface-elevated transition-colors cursor-pointer">
                                 <td className="py-3">
                                     <div className="font-medium text-foreground">{proc.name}</div>
                                     <div className="text-xs text-muted">{proc.department}</div>

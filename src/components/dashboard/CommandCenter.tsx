@@ -120,7 +120,7 @@ const LiveProcessActivity = () => {
                             const timeString = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
                             
                             return (
-                                <tr key={inst.id} className="group hover:bg-surface-elevated transition-colors cursor-pointer">
+                                <tr key={inst.id} onClick={() => window.location.href = '/instances'} className="group hover:bg-surface-elevated transition-colors cursor-pointer">
                                     <td className="py-3 text-muted text-xs whitespace-nowrap">{timeString}</td>
                                     <td className="py-3">
                                         <div className="font-medium text-foreground">{inst.processName}</div>
