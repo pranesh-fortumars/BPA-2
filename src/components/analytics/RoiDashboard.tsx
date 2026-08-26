@@ -101,7 +101,7 @@ export const RoiDashboard = () => {
                     <h3 className="text-sm font-bold text-foreground uppercase tracking-widest mb-6 flex items-center gap-2">
                         <TrendingUp size={16} className="text-primary" /> Monthly Value Trend (₹ Lakhs)
                     </h3>
-                    <div className="flex-1">
+                    <div className="flex-1 min-h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={metrics.monthlySavings} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
                                 <defs>
@@ -123,7 +123,7 @@ export const RoiDashboard = () => {
                     <h3 className="text-sm font-bold text-foreground uppercase tracking-widest mb-6 flex items-center gap-2">
                         <PieChart size={16} className="text-primary" /> Value by Department
                     </h3>
-                    <div className="flex-1">
+                    <div className="flex-1 min-h-[300px]">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={metrics.deptSavings} layout="vertical" margin={{ top: 0, right: 0, left: 10, bottom: 0 }}>
                                 <XAxis type="number" hide />

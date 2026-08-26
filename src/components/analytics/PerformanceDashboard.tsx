@@ -84,7 +84,7 @@ export const PerformanceDashboard = () => {
                 <h3 className="text-sm font-bold text-foreground uppercase tracking-widest mb-6 flex items-center gap-2">
                     <Globe size={16} className="text-primary" /> Global Request Latency (ms)
                 </h3>
-                <div className="flex-1">
+                <div className="flex-1 min-h-[300px]">
                     <ResponsiveContainer width="100%" height="100%">
                         <AreaChart data={telemetry.latencyHistory} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
                             <defs>
