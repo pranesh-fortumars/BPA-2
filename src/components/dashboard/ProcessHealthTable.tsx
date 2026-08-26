@@ -31,7 +31,7 @@ export const ProcessHealthTable = () => {
                     <h3 className="text-sm font-bold text-foreground uppercase tracking-widest">Process Health Overview</h3>
                     <Info size={14} className="text-muted cursor-help" />
                 </div>
-                <a href="/processes" className="text-xs font-medium text-primary hover:underline">View all processes &rarr;</a>
+                <a href="/builder" className="text-xs font-medium text-primary hover:underline">View all processes &rarr;</a>
             </div>
             
             <div className="overflow-x-auto">

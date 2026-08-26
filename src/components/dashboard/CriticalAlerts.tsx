@@ -35,7 +35,7 @@ export const CriticalAlerts = () => {
                         {alerts.length}
                     </span>
                 </div>
-                <a href="/alerts" className="text-xs font-medium text-primary hover:underline">View all &rarr;</a>
+                <a href="/audit" className="text-xs font-medium text-primary hover:underline">View all &rarr;</a>
             </div>
             
             <div className="space-y-3">

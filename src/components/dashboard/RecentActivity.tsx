@@ -14,7 +14,7 @@ export const RecentActivity = () => {
         <div className="bg-surface border border-border rounded-xl p-5 h-full">
             <div className="flex items-center justify-between mb-5">
                 <h3 className="text-sm font-bold text-foreground uppercase tracking-widest">Recent Activity</h3>
-                <a href="/activities" className="text-xs font-medium text-primary hover:underline">View all &rarr;</a>
+                <a href="/audit" className="text-xs font-medium text-primary hover:underline">View all &rarr;</a>
             </div>
             
             <div className="space-y-4">

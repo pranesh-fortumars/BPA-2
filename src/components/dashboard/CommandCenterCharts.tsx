@@ -97,7 +97,7 @@ export const CommandCenterCharts = () => {
             <div className="bg-surface border border-border rounded-xl p-5 flex flex-col">
                 <div className="flex items-center justify-between mb-4">
                     <h3 className="text-sm font-bold text-foreground uppercase tracking-widest">Automation Distribution</h3>
-                    <a href="/roi" className="text-[10px] text-primary hover:underline">View full analytics &rarr;</a>
+                    <a href="/analytics" className="text-[10px] text-primary hover:underline">View full analytics &rarr;</a>
                 </div>
                 
                 <div className="flex-1 flex items-center justify-center relative min-h-[200px]">
