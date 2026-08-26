@@ -197,14 +197,21 @@ export const Sidebar = () => {
   );
 };
 
-const SidebarSection = ({ title, items, activeItem, isCollapsed }) => {
+interface SidebarSectionProps {
+  title: string;
+  items: any[];
+  activeItem: string;
+  isCollapsed: boolean;
+}
+
+const SidebarSection = ({ title, items, activeItem, isCollapsed }: SidebarSectionProps) => {
    if (items.length === 0) return null;
    
    return (
       <div className="mb-2">
          {!isCollapsed && <p className="px-3 text-[10px] font-bold text-primary uppercase tracking-widest mb-3">{title}</p>}
          <div className="space-y-1">
-            {items.map((item) => (
+            {items.map((item: any) => (
                <SidebarItem 
                   key={item.label}
                   {...item}
