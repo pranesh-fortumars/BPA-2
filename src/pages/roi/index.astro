@@ -1,23 +1,8 @@
 ---
 import DashboardLayout from '../../layouts/DashboardLayout.astro';
-import { PieChart } from 'lucide-react';
+import { RoiDashboard } from '../../components/analytics/RoiDashboard';
 ---
 
 <DashboardLayout title="Analytics & ROI">
-  <div class="space-y-6">
-    <div class="flex items-end justify-between gap-6 pb-2">
-      <div>
-        <h1 class="text-3xl font-bold text-foreground tracking-tight">Analytics & ROI</h1>
-        <p class="text-sm text-muted mt-1">Track automation value, cost savings, and investment returns</p>
-      </div>
-    </div>
-    
-    <div class="bg-surface border border-border rounded-xl p-16 flex flex-col items-center justify-center text-center">
-      <div class="w-20 h-20 bg-primary/10 text-primary rounded-3xl flex items-center justify-center mb-6">
-        <PieChart size={40} />
-      </div>
-      <h2 class="text-2xl font-bold text-foreground mb-3 tracking-tight">Financial Analytics Coming Soon</h2>
-      <p class="text-muted max-w-md mx-auto leading-relaxed">The deep ROI calculator and value tracking dashboard is currently in development. This module will be available in an upcoming release.</p>
-    </div>
-  </div>
+  <RoiDashboard client:load />
 </DashboardLayout>
