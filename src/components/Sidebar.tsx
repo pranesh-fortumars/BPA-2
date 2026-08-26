@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, 
   Workflow, 
@@ -95,7 +95,23 @@ export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const user = useStore(currentUser);
   
-  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '';
+  const [currentPath, setCurrentPath] = useState(typeof window !== 'undefined' ? window.location.pathname : '');
+
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setCurrentPath(window.location.pathname);
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+    document.addEventListener('astro:page-load', handleLocationChange);
+
+    handleLocationChange();
+
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      document.removeEventListener('astro:page-load', handleLocationChange);
+    };
+  }, []);
   
   const getActiveItem = () => {
     const allItems = [
