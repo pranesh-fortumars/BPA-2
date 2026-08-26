@@ -91,11 +91,11 @@ const governanceItems = [
   { icon: Settings, label: 'Administration', path: '/settings' },
 ];
 
-export const Sidebar = () => {
+export const Sidebar = ({ currentPath: initialPath = '' }: { currentPath?: string }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const user = useStore(currentUser);
   
-  const [currentPath, setCurrentPath] = useState(typeof window !== 'undefined' ? window.location.pathname : '');
+  const [currentPath, setCurrentPath] = useState(typeof window !== 'undefined' ? window.location.pathname : initialPath);
 
   useEffect(() => {
     const handleLocationChange = () => {

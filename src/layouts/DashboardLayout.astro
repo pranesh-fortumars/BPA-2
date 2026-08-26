@@ -12,13 +12,14 @@ interface Props {
 }
 
 const { title, activeDept } = Astro.props;
+const currentPath = Astro.url.pathname;
 ---
 
 <MainLayout title={title}>
   <div class="flex min-h-screen bg-background text-foreground font-sans">
     <MockLoginOverlay client:only="react" />
     <MockInit client:only="react" />
-    <Sidebar client:load />
+    <Sidebar client:load currentPath={currentPath} />
     
     <div class="flex-1 transition-all duration-300 ml-[280px] bg-background min-h-screen flex flex-col">
       <!-- Topbar -->
