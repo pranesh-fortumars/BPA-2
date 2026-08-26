@@ -1,0 +1,23 @@
+---
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { Database } from 'lucide-react';
+---
+
+<DashboardLayout title="Environments & Deployments">
+  <div class="space-y-6">
+    <div class="flex items-end justify-between gap-6 pb-2">
+      <div>
+        <h1 class="text-3xl font-bold text-foreground tracking-tight">Environments & Deployments</h1>
+        <p class="text-sm text-muted mt-1">Manage staging, production clusters, and deployment history</p>
+      </div>
+    </div>
+    
+    <div class="bg-surface border border-border rounded-xl p-16 flex flex-col items-center justify-center text-center">
+      <div class="w-20 h-20 bg-primary/10 text-primary rounded-3xl flex items-center justify-center mb-6">
+        <Database size={40} />
+      </div>
+      <h2 class="text-2xl font-bold text-foreground mb-3 tracking-tight">Deployment Center Coming Soon</h2>
+      <p class="text-muted max-w-md mx-auto leading-relaxed">The multi-environment management console is currently in development. This module will be available in an upcoming release.</p>
+    </div>
+  </div>
+</DashboardLayout>
