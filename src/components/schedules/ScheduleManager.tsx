@@ -4,22 +4,23 @@ import { GlassCard } from '../GlassCard';
 import { Calendar, Clock, PlayCircle, Plus, CheckCircle2, AlertTriangle, Power } from 'lucide-react';
 
 export const ScheduleManager = () => {
-    const [schedules, setSchedules] = useState<any[]>([]);
+    const initialJobs = [
+        { id: 'job-1', name: 'Nightly Data Sync', nextRun: 'Today, 11:00 PM', status: 'Active', frequency: 'Daily', cron: '0 23 * * *', type: 'Data Sync', lastStatus: 'Success' },
+        { id: 'job-2', name: 'Weekly Report Generation', nextRun: 'Friday, 5:00 PM', status: 'Active', frequency: 'Weekly', cron: '0 17 * * 5', type: 'System', lastStatus: 'Success' },
+        { id: 'job-3', name: 'Cleanup Old Logs', nextRun: 'Sunday, 2:00 AM', status: 'Paused', frequency: 'Weekly', cron: '0 2 * * 0', type: 'System', lastStatus: 'Failed' },
+        { id: 'job-4', name: 'Hourly Health Check', nextRun: 'Today, 2:00 PM', status: 'Active', frequency: 'Hourly', cron: '0 * * * *', type: 'Monitoring', lastStatus: 'Success' }
+    ];
+
+    const [schedules, setSchedules] = useState<any[]>(initialJobs);
 
     useEffect(() => {
         const initData = async () => {
-            let stored = await DataService.getAll<any>('scheduled_jobs');
-            if (stored.length === 0) {
-                const initial = [
-                    { id: 'sch-001', name: 'Nightly ERP Sync', type: 'Data Sync', cron: '0 2 * * *', status: 'Active', nextRun: 'in 4 hours', lastStatus: 'Success' },
-                    { id: 'sch-002', name: 'Weekly Backup Archive', type: 'System', cron: '0 0 * * 0', status: 'Active', nextRun: 'in 2 days', lastStatus: 'Success' },
-                    { id: 'sch-003', name: 'Invoice Processing Batch', type: 'Finance', cron: '*/30 * * * *', status: 'Paused', nextRun: 'Paused', lastStatus: 'Failed' },
-                    { id: 'sch-004', name: 'HR Roster Update', type: 'HR', cron: '0 8 * * 1-5', status: 'Active', nextRun: 'Tomorrow 08:00', lastStatus: 'Success' }
-                ];
-                for (const s of initial) await DataService.save('scheduled_jobs', s);
-                stored = initial;
+            let data = await DataService.getAll<any>('scheduled_jobs');
+            if (data.length > 0) {
+                setSchedules(data);
+            } else {
+                for (const j of initialJobs) await DataService.save('scheduled_jobs', j).catch(() => {});
             }
-            setSchedules(stored);
         };
         initData();
     }, []);

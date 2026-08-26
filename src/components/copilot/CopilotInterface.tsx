@@ -4,23 +4,24 @@ import { GlassCard } from '../GlassCard';
 import { Bot, User, Send, Sparkles } from 'lucide-react';
 
 export const CopilotInterface = () => {
-    const [messages, setMessages] = useState<any[]>([]);
+    const initialMessages = [
+        { id: 'msg-1', sender: 'ai', text: 'Hello! I am your Enterprise Automation Copilot. I can help you analyze processes, generate workflows, or troubleshoot bots. How can I assist you today?' },
+        { id: 'msg-2', sender: 'user', text: 'Can you show me the ROI for the Finance Invoice process?' },
+        { id: 'msg-3', sender: 'ai', text: 'Certainly! The Finance Invoice Routing process has generated **₹1.8L** in savings this quarter, recovering approximately **120 hours** of manual work. Would you like to see a breakdown by step?' }
+    ];
+
+    const [messages, setMessages] = useState<any[]>(initialMessages);
     const [input, setInput] = useState('');
     const endRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const initData = async () => {
             let data = await DataService.getAll<any>('copilot_chat');
-            if (data.length === 0) {
-                const initial = [
-                    { id: 'msg-1', sender: 'ai', text: 'Hello! I am your Enterprise Automation Copilot. I can help you analyze processes, generate workflows, or troubleshoot bots. How can I assist you today?' },
-                    { id: 'msg-2', sender: 'user', text: 'Can you show me the ROI for the Finance Invoice process?' },
-                    { id: 'msg-3', sender: 'ai', text: 'Certainly! The Finance Invoice Routing process has generated **₹1.8L** in savings this quarter, recovering approximately **120 hours** of manual work. Would you like to see a breakdown by step?' }
-                ];
-                for (const m of initial) await DataService.save('copilot_chat', m);
-                data = initial;
+            if (data.length > 0) {
+                setMessages(data);
+            } else {
+                for (const m of initialMessages) await DataService.save('copilot_chat', m).catch(() => {});
             }
-            setMessages(data);
         };
         initData();
     }, []);

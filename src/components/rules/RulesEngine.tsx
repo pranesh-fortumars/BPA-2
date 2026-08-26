@@ -4,23 +4,23 @@ import { GlassCard } from '../GlassCard';
 import { Scale, Network, GitBranch, Plus, Play, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export const RulesEngine = () => {
-    const [rules, setRules] = useState<any[]>([]);
+    const initialRules = [
+        { id: 'br-1', name: 'High-Value Invoice Approval', category: 'Finance', condition: 'Invoice.Amount > $50,000', action: 'Route to CFO', status: 'Active', executions: 1250, lastUpdated: '2 days ago', version: 'v1.0' },
+        { id: 'br-2', name: 'Candidate Auto-Reject', category: 'HR', condition: 'Candidate.Score < 60', action: 'Send Rejection Email', status: 'Active', executions: 890, lastUpdated: '5 days ago', version: 'v1.2' },
+        { id: 'br-3', name: 'New Client Onboarding', category: 'Sales', condition: 'Contract.Signed == True', action: 'Trigger Provisioning', status: 'Active', executions: 340, lastUpdated: '1 week ago', version: 'v2.0' },
+        { id: 'br-4', name: 'Fraud Detection Threshold', category: 'Security', condition: 'Login.Attempts > 5', action: 'Lock Account', status: 'Testing', executions: 45, lastUpdated: '1 day ago', version: 'v0.9' }
+    ];
+
+    const [rules, setRules] = useState<any[]>(initialRules);
 
     useEffect(() => {
         const initData = async () => {
-            let storedRules = await DataService.getAll<any>('business_rules');
-            
-            if (storedRules.length === 0) {
-                const initial = [
-                    { id: 'rule-001', name: 'Invoice Routing Matrix', category: 'Finance', status: 'Active', executions: 45210, lastUpdated: '2 days ago', version: 'v2.4' },
-                    { id: 'rule-002', name: 'High-Risk Approval Chain', category: 'Compliance', status: 'Active', executions: 1205, lastUpdated: '1 week ago', version: 'v1.1' },
-                    { id: 'rule-003', name: 'Support Ticket Triaging', category: 'CRM', status: 'Draft', executions: 0, lastUpdated: '4 hours ago', version: 'v3.0-draft' },
-                    { id: 'rule-004', name: 'Vendor Onboarding Checks', category: 'Operations', status: 'Active', executions: 890, lastUpdated: '3 weeks ago', version: 'v1.0' }
-                ];
-                for (const r of initial) await DataService.save('business_rules', r);
-                storedRules = initial;
+            let data = await DataService.getAll<any>('business_rules');
+            if (data.length > 0) {
+                setRules(data);
+            } else {
+                for (const r of initialRules) await DataService.save('business_rules', r).catch(() => {});
             }
-            setRules(storedRules);
         };
         initData();
     }, []);

@@ -4,34 +4,36 @@ import { GlassCard } from '../GlassCard';
 import { TerminalSquare, Webhook, Key, Activity, CheckCircle2, AlertTriangle, ShieldCheck, Copy, Plus } from 'lucide-react';
 
 export const ApiManager = () => {
-    const [webhooks, setWebhooks] = useState<any[]>([]);
-    const [apiKeys, setApiKeys] = useState<any[]>([]);
+    const initialWebhooks = [
+        { id: 'wh-001', name: 'ERP Sync Target', endpoint: 'https://erp.internal/api/v2/webhook', status: 'Healthy', lastTriggered: '10 mins ago', events: 4280 },
+        { id: 'wh-002', name: 'HRIS Onboarding', endpoint: 'https://hr.internal/api/webhook/new-hire', status: 'Warning', lastTriggered: '1 hour ago', events: 145 },
+        { id: 'wh-003', name: 'Slack Notifications', endpoint: 'https://hooks.slack.com/services/T0000/B0000/XXX', status: 'Healthy', lastTriggered: '2 mins ago', events: 12500 }
+    ];
+    
+    const initialKeys = [
+        { id: 'key-001', name: 'Frontend Client App', keyPreview: 'bpa_live_*******************', role: 'Read/Write', lastUsed: 'Just now' },
+        { id: 'key-002', name: 'Reporting Service', keyPreview: 'bpa_test_*******************', role: 'Read Only', lastUsed: '2 days ago' }
+    ];
+
+    const [webhooks, setWebhooks] = useState<any[]>(initialWebhooks);
+    const [apiKeys, setApiKeys] = useState<any[]>(initialKeys);
 
     useEffect(() => {
         const initData = async () => {
             let storedWebhooks = await DataService.getAll<any>('webhooks');
             let storedKeys = await DataService.getAll<any>('api_keys');
             
-            if (storedWebhooks.length === 0) {
-                const initialWebhooks = [
-                    { id: 'wh-001', name: 'ERP Sync Target', endpoint: 'https://erp.internal/api/v2/webhook', status: 'Healthy', lastTriggered: '10 mins ago', events: 4280 },
-                    { id: 'wh-002', name: 'HRIS Onboarding', endpoint: 'https://hr.internal/api/webhook/new-hire', status: 'Warning', lastTriggered: '1 hour ago', events: 145 },
-                    { id: 'wh-003', name: 'Slack Notifications', endpoint: 'https://hooks.slack.com/services/T0000/B0000/XXX', status: 'Healthy', lastTriggered: '2 mins ago', events: 12500 }
-                ];
-                for (const w of initialWebhooks) await DataService.save('webhooks', w);
-                storedWebhooks = initialWebhooks;
-            }
-            if (storedKeys.length === 0) {
-                const initialKeys = [
-                    { id: 'key-001', name: 'Frontend Client App', keyPreview: 'bpa_live_*******************', role: 'Read/Write', lastUsed: 'Just now' },
-                    { id: 'key-002', name: 'Reporting Service', keyPreview: 'bpa_test_*******************', role: 'Read Only', lastUsed: '2 days ago' }
-                ];
-                for (const k of initialKeys) await DataService.save('api_keys', k);
-                storedKeys = initialKeys;
+            if (storedWebhooks.length > 0) {
+                setWebhooks(storedWebhooks);
+            } else {
+                for (const w of initialWebhooks) await DataService.save('webhooks', w).catch(() => {});
             }
             
-            setWebhooks(storedWebhooks);
-            setApiKeys(storedKeys);
+            if (storedKeys.length > 0) {
+                setApiKeys(storedKeys);
+            } else {
+                for (const k of initialKeys) await DataService.save('api_keys', k).catch(() => {});
+            }
         };
         initData();
     }, []);
