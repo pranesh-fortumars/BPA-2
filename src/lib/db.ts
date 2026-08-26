@@ -6,19 +6,43 @@
  */
 
 const DB_NAME = 'bpa_pro_db';
-const DB_VERSION = 8;
+const DB_VERSION = 10;
+
+let dbInstance: IDBDatabase | null = null;
 
 // A simple promise-based IndexedDB wrapper
 export const initDB = (): Promise<IDBDatabase> => {
+  if (dbInstance) return Promise.resolve(dbInstance);
+
   return new Promise((resolve, reject) => {
     if (typeof window === 'undefined') {
         return reject(new Error("IndexedDB is not available on the server"));
     }
 
+    const timeout = setTimeout(() => reject(new Error("IndexedDB open timeout")), 1500);
+
     const request = indexedDB.open(DB_NAME, DB_VERSION + 1); // incremented version
 
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve(request.result);
+    request.onblocked = () => {
+        clearTimeout(timeout);
+        reject(new Error("IndexedDB blocked by another connection"));
+    };
+
+    request.onerror = () => {
+        clearTimeout(timeout);
+        reject(request.error);
+    };
+
+    request.onsuccess = () => {
+        clearTimeout(timeout);
+        const db = request.result;
+        db.onversionchange = () => {
+            db.close();
+            dbInstance = null;
+        };
+        dbInstance = db;
+        resolve(db);
+    };
 
     request.onupgradeneeded = (e: IDBVersionChangeEvent) => {
       const db = (e.target as IDBOpenDBRequest).result;
@@ -62,6 +86,16 @@ export const initDB = (): Promise<IDBDatabase> => {
       if (!db.objectStoreNames.contains('support_tickets')) db.createObjectStore('support_tickets', { keyPath: 'id' });
       if (!db.objectStoreNames.contains('connected_apps')) db.createObjectStore('connected_apps', { keyPath: 'id' });
       if (!db.objectStoreNames.contains('system_settings')) db.createObjectStore('system_settings', { keyPath: 'id' });
+
+      // Phase 6 Expansion Stores
+      if (!db.objectStoreNames.contains('webhooks')) db.createObjectStore('webhooks', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('api_keys')) db.createObjectStore('api_keys', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('business_rules')) db.createObjectStore('business_rules', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('scheduled_jobs')) db.createObjectStore('scheduled_jobs', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('roi_metrics')) db.createObjectStore('roi_metrics', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('telemetry')) db.createObjectStore('telemetry', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('copilot_chat')) db.createObjectStore('copilot_chat', { keyPath: 'id' });
+      if (!db.objectStoreNames.contains('environments')) db.createObjectStore('environments', { keyPath: 'id' });
     };
   });
 };

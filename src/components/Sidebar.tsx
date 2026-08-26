@@ -85,10 +85,10 @@ const insightItems = [
 
 // GOVERNANCE
 const governanceItems = [
-  { icon: ClipboardList, label: 'Audit Center', path: '/audit' },
-  { icon: ShieldCheck, label: 'Security & Access', path: '/security' },
-  { icon: Database, label: 'Environments & Deployments', path: '/environments' },
-  { icon: Settings, label: 'Administration', path: '/settings' },
+  { icon: ClipboardList, label: 'Audit Center', path: '/audit', color: 'text-amber-500' },
+  { icon: ShieldCheck, label: 'Security & Access', path: '/security', color: 'text-rose-500' },
+  { icon: Database, label: 'Environments & Deployments', path: '/environments', color: 'text-cyan-500' },
+  { icon: Settings, label: 'Administration', path: '/settings', color: 'text-slate-400' },
 ];
 
 export const Sidebar = ({ currentPath: initialPath = '' }: { currentPath?: string }) => {
@@ -259,7 +259,7 @@ const SidebarItem = ({ icon: Icon, label, isActive, isCollapsed, color = "", pat
         ${isCollapsed ? 'justify-center' : ''}
       `}
     >
-      <Icon size={18} className={`${isActive ? 'text-primary-foreground' : 'text-muted group-hover:text-foreground'} transition-colors duration-200`} />
+      <Icon size={18} className={`${isActive ? 'text-primary-foreground' : `${color || 'text-muted'}`} transition-colors duration-200`} />
       
       {!isCollapsed && (
         <span className={`text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis ${isActive ? 'text-primary-foreground' : 'text-foreground'}`}>
